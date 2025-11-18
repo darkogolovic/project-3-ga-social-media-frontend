@@ -102,6 +102,11 @@ h2 {
 a {
   color: rgb(34, 197, 215);
 }
+
+p{
+    margin-bottom: 15px;
+}
+
 @media (max-width: 480px) {
   .box {
     padding: 36px 28px;
@@ -114,3 +119,5 @@ a {
  .not{
     color: black;
  }
+
+

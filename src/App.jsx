@@ -5,7 +5,7 @@ import SignUp from './pages/sign-up/sign-up';
 const App = () => {
   return (
     <>
-    
+    <SignIn/>
     <SignUp />
     <Toaster  
         position='top-center'
