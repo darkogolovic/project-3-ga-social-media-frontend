@@ -80,7 +80,7 @@ const SignUp = () => {
             <div className="box">
                 <h2>Sign Up</h2>
                 <p>Create your account to get started</p>
-            </div>
+            
 
             <form onSubmit={handleSubmit} className="form">
                 <div className="group">
@@ -139,7 +139,7 @@ const SignUp = () => {
                     Sign Up
                 </button>
             </form>
-            
+            </div>
         </div>
     )
 }
