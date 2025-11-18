@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import './sign-up.css'
+import { useState, useEffect} from 'react'
+import '../sign-in/sign.css'
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from "react-router";
 
 const modalOverlay = {
   position: "fixed",
@@ -57,8 +59,6 @@ const SignUp = () => {
         confirmPassword: ''
     })
 
-        const [showModal, setShowModal] = useState(false);
-
     const handleChange = (e) => {
         setFormData({
             ...formData, [e.target.name]: e.target.value
@@ -67,35 +67,24 @@ const SignUp = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-
+    
         if (formData.password !== formData.confirmPassword) {
-            setShowModal(true);
+            toast.error('Passwords must match')
             return
         }
-
-        console.log('Form submitted:', formData)
+        
     }
 
     return (
-        <div>
-            {showModal && (
-                <div style={modalOverlay}>
-                    <div style={modalBox}>
-                        <h3>Passwords do not match</h3>
-                        <button onClick={() => setShowModal(false)} style={closeBtn}>
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
-            <div>
+        <div className="container">
+            <div className="box">
                 <h2>Sign Up</h2>
                 <p>Create your account to get started</p>
             </div>
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email"></label>
+            <form onSubmit={handleSubmit} className="form">
+                <div className="group">
+                    <label htmlFor="email" ></label>
                     <input
                         id="email"
                         name="email"
@@ -107,7 +96,7 @@ const SignUp = () => {
                     />
                 </div>
 
-                <div>
+                <div className="group">
                     <label htmlFor="username"></label>
                     <input
                         id="username"
@@ -120,7 +109,7 @@ const SignUp = () => {
                     />
                 </div>
 
-                <div>
+                <div className="group">
                     <label htmlFor="password"></label>
                     <input
                         id="password"
@@ -133,7 +122,7 @@ const SignUp = () => {
                     />
                 </div>
 
-                <div>
+                <div className="group">
                     <label htmlFor="confirmPassword"></label>
                     <input
                         id="confirmPassword"
@@ -146,10 +135,11 @@ const SignUp = () => {
                     />
                 </div>
 
-                <button type="submit">
+                <button  onClick={()=>handleSubmit()} type="submit" className="button" >
                     Sign Up
                 </button>
             </form>
+            
         </div>
     )
 }

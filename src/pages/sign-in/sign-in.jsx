@@ -1,42 +1,64 @@
-
-
-import React, {useState} from "react";
-
-import ' ./sign-in.css';
-
+import { useState } from "react";
+import { signIn } from "../../services/authService";
+import './sign.css'
 
 const SignIn = () => {
+    const [message, setMessage] = useState("");
+    const [formData, setFormData] = useState({
+        username: "",
+        password: "",
+    });
 
- 
-return (
+    const handleChange = (evt) => {
+        setMessage("");
+        setFormData({ ...formData, [evt.target.name]: evt.target.value });
+    };
 
-    <div className="login-container">
-      <div className="login-box">
-        <h2>Login</h2>
-        
-        <form onSubmit={handleSubmit} className="login-form">
+    const handleSubmit = async (evt) => {
+        evt.preventDefault();
+        console.log("Form submitted:", formData);
 
-          <div className="form-group">
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-            />
-            
-          </div>
-            <div className="form-group">
-            <label>Password:</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-            />
-          </div>
-          <button type="submit" className="login-button">Sign In</button>
-          </form>
-      </div>
-    </div>
-  );
-}
-          export default SignIn;
+        try {
+            const signedInUser = await signIn(formData);
+            setUser(signedInUser);
+            navigate("/");
+        } catch (err) {
+            setMessage(err.message);
+        }
+    };
+
+    return (
+        <div className="container">
+            <div className="box">
+                <h2>Login</h2>
+
+                <form onSubmit={handleSubmit} className="form">
+                    <div className="group">
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Enter your username"
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="group">
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <button type="submit" className="button">
+                        Sign In
+                    </button>
+                    <p>Don't have an account?<br/> Create one <a href="/sign-up">HERE</a></p>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default SignIn;
