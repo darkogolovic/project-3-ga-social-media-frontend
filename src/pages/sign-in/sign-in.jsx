@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { signIn } from "../../services/authService";
 import './sign.css'
+import Welcome from "../../components/Welcome";
+
 
 const SignIn = () => {
     const [message, setMessage] = useState("");
@@ -28,6 +30,8 @@ const SignIn = () => {
     };
 
     return (
+        <div className="mainholder">
+        <Welcome/>
         <div className="container">
             <div className="box">
                 <h2>Login</h2>
@@ -54,8 +58,8 @@ const SignIn = () => {
                     <button type="submit" className="button">
                         Sign In
                     </button>
-                    <p>Don't have an account?<br/> Create one <a href="/sign-up">HERE</a></p>
                 </form>
+            </div>
             </div>
         </div>
     );

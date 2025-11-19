@@ -2,6 +2,7 @@ import { useState, useEffect} from 'react'
 import '../sign-in/sign.css'
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from "react-router";
+import Welcome from '../../components/Welcome';
 
 const modalOverlay = {
   position: "fixed",
@@ -76,10 +77,14 @@ const SignUp = () => {
     }
 
     return (
+        <div className="mainholder">
+        <Welcome />
         <div className="container">
             <div className="box">
+                
                 <h2>Sign Up</h2>
                 <p>Create your account to get started</p>
+                <br/>
             
 
             <form onSubmit={handleSubmit} className="form">
@@ -139,6 +144,7 @@ const SignUp = () => {
                     Sign Up
                 </button>
             </form>
+            </div>
             </div>
         </div>
     )
