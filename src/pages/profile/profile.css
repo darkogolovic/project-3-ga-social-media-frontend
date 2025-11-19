@@ -1,0 +1,124 @@
+/* Profile.css */
+.profile {
+    hight: 80vh;
+  max-width: 600px;
+  width: 100%;
+  margin: auto;
+  padding:20px;
+}
+
+/* Header */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 40px;
+  padding: 30px;
+  border-bottom: 2px solid #eee;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #9da0a3;
+}
+
+.profile-pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info {
+  flex:1;
+
+    
+}
+
+.username {
+  font-size: 24px;
+  font-weight: 300;
+  margin: 0 0 20px 0;
+  color: #cdbdbd;
+}
+
+.button {
+background: rgba(27, 13, 54, 0.127);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 40px;
+  padding: 20px 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+/* Statistike */
+.stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: px;
+  margin-bottom: 0px;
+  border: 0px solid rgba(255, 255, 255, 0.1);
+  
+}
+
+.stat {
+  text-align: left;
+  margin-bottom:px;
+}
+
+.number {
+  display: grid;
+  font-size: 40px;
+  font-weight: lighter;
+  color: #c9cdc6;
+}
+
+
+
+
+
+.label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+}
+
+
+
+/* Postovi */
+.posts-section h2 {
+  text-align: center;
+  font-weight: 300;
+  margin-bottom: 20px;
+  color: #eaece7;
+  font-size: 20px;
+  
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.post {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f5f5f5;
+}
+
+.post img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+  
+}
+
+.post:hover img {
+  transform: scale(1.05);
+}
