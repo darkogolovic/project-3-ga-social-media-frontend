@@ -6,6 +6,7 @@ import SignUp from "./pages/sign-up/Sign-up";
 import FeedPage from "./pages/feed/FeedPage";
 import Profile from "./pages/profile/profile";
 import Verify from "./pages/verify/Verify";
+import Conversations from "./pages/conversation/Conversations";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,8 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Profile/> },
       { path: "/", element: <FeedPage/> },
-      {path:'/verify', element:<Verify />}
+      {path:'/verify', element:<Verify />},
+      {path:'/conversations',element:<Conversations />}
       
     ],
   },
