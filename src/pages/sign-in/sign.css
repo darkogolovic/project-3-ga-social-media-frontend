@@ -2,11 +2,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  text-align: center;
 }
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: "Inter", sans-serif;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   min-height: 100vh;
   display: flex;
@@ -14,6 +14,15 @@ body {
   justify-content: center;
   padding: 20px;
   color: white;
+}
+
+.mainholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .container {
@@ -30,6 +39,7 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+
 h2 {
   color: #ffffff;
   font-size: 32px;
@@ -39,14 +49,11 @@ h2 {
   letter-spacing: -0.5px;
 }
 
+
 .form {
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-
-.group {
-  position: relative;
 }
 
 .group input {
@@ -57,9 +64,7 @@ h2 {
   border-radius: 12px;
   color: #ffffff;
   font-size: 15px;
-  font-weight: 400;
-  transition: all 0.3s ease;
-  outline: none;
+  transition: 0.3s ease;
 }
 
 .group input::placeholder {
@@ -99,25 +104,26 @@ h2 {
   transform: translateY(0);
 }
 
-a {
-  color: rgb(34, 197, 215);
+#login {
+  margin-top: 20px;
+  background: transparent;
+  color: #4a9eff;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 15px;
 }
 
-p{
-    margin-bottom: 15px;
-}
-
-@media (max-width: 480px) {
-  .box {
-    padding: 36px 28px;
+@media (max-width: 780px) {
+  .mainholder {
+    flex-direction: column-reverse;
+    text-align: center;
+    gap: 30px;
   }
 
-  h2 {
-    font-size: 28px;
+  .container {
+    max-width: 100%;
   }
 }
- .not{
-    color: black;
- }
-
-

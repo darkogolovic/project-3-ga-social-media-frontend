@@ -5,12 +5,13 @@ import SignIn from "./pages/sign-in/Sign-in";
 import SignUp from "./pages/sign-up/Sign-up";
 import FeedPage from "./pages/feed/FeedPage";
 import Profile from "./pages/profile/profile";
+import Verify from "./pages/verify/Verify";
 
 const router = createBrowserRouter([
   {
     element: <AuthLayout />,
     children: [
-      { path: "/login", element: <SignIn /> },
+      { path: "/", element: <SignIn /> },
       { path: "/register", element: <SignUp /> },
     ],
   },
@@ -18,6 +19,8 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { path: "/", element: <Profile/> },
+      { path: "/", element: <FeedPage/> },
+      {path:'/verify', element:<Verify />}
       
     ],
   },
