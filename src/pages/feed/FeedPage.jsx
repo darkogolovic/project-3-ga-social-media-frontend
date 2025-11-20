@@ -19,6 +19,11 @@ const FeedPage = () => {
 
     <div className="post-box">
       <img src="https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?cs=srgb&dl=pexels-anjana-c-169994-674010.jpg&fm=jpg" />
+      <div className="dots">
+    <span className="dot active"></span>
+    <span className="dot"></span>
+    <span className="dot"></span>
+  </div>
   </div>
       <div className="actions">
         <button className="like-btn">LIKE</button>
