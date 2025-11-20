@@ -1,56 +1,7 @@
 import { useState, useEffect} from 'react'
 import '../sign-in/sign.css'
-import toast, { Toaster } from 'react-hot-toast';
-import { useNavigate } from "react-router";
+import toast from 'react-hot-toast';
 import Welcome from '../../components/Welcome';
-
-const modalOverlay = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100vw",
-  height: "100vh",
-  background: "rgba(0,0,0,0.55)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  zIndex: 9999,
-};
-
-const modalBox = {
-  background: "white",
-  padding: "28px",
-  borderRadius: "14px",
-  textAlign: "center",
-  width: "320px",
-  maxWidth: "90%",
-  boxShadow: "0 12px 40px rgba(0,0,0,0.25)",
-  transform: "translateY(0)",
-};
-
-const titleStyle = {
-  margin: 0,
-  marginBottom: "12px",
-  fontSize: "18px",
-  color: "#222",
-};
-
-const messageStyle = {
-  margin: 0,
-  marginBottom: "18px",
-  color: "#555",
-  fontSize: "14px",
-};
-
-const closeBtn = {
-  padding: "10px 16px",
-  border: "none",
-  background: "#ef4444",
-  color: "white",
-  borderRadius: "10px",
-  cursor: "pointer",
-  fontSize: "14px",
-};
 
 const SignUp = () => {
     const [formData, setFormData] = useState({
@@ -77,6 +28,7 @@ const SignUp = () => {
     }
 
     return (
+        <div className='sign'>
         <div className="mainholder">
         <Welcome />
         <div className="container">
@@ -146,6 +98,7 @@ const SignUp = () => {
             </form>
             </div>
             </div>
+        </div>
         </div>
     )
 }

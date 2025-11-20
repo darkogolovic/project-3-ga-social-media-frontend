@@ -29,6 +29,7 @@ const Profile = () => {
   
 
   return (
+    <div className='prof'>
     <div className="profile">
       {/* Header sa slikom i osnovnim podacima */}
 
@@ -81,6 +82,7 @@ const Profile = () => {
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 }
