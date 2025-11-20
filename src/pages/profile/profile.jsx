@@ -1,5 +1,5 @@
 import "./profile.css";
-import { useCurrentUser } from "../../hooks/useCurrentUser";
+import { useCurrentUser } from "../../hooks/useCurrentUser.js";
 
 const Profile = () => {
   const { data: user, isLoading } = useCurrentUser();
