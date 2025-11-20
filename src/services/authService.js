@@ -1,49 +1,30 @@
-import axios from "axios"
+import api from "../lib/axios";
 
-const BASE_URL = `${import.meta.env.VITE_BACK_END_SERVER_URL}/auth`;
+ const authService = {
+  register: async (data) => {
+   const res = await api.post("/register", data)
+    return res.data
+  },
 
+  verify: async (data) => {
+    const res = await api.post("/verify", data)
+    return res.data
+  },
+  resendCode:async (email) =>{
+   const res = await api.post("/resend-code", { email })
+   return res.data
+  },
+  login: async (data) => {
+    const res = await api.post("/login", data)
+    return res.data
 
-const signUp = async (formData) => {
-    try {
-        const res = await axios.post(`${BASE_URL}/sign-up`, formData)
-        const data = await res.data
+  },
+  me: async() => {
+   const res = await api.get("/me")
+    return res.data
 
-        if (data.err) {
-      throw new Error(data.err);
-    }
-
-    if (data.token) {
-      localStorage.setItem('token', data.token);
-      return JSON.parse(atob(data.token.split('.')[1])).payload;
-    }
-
-    throw new Error('Invalid response from server');
-  } catch (err) {
-    console.log(err);
-    throw new Error(err);
-  }
+  },
 };
 
-const signIn = async (formData) => {
-  try {
-    const res = await axios.post(`${BASE_URL}/sign-in`, formData)
+export default authService
 
-    const data = await res.data;
-
-    if (data.err) {
-      throw new Error(data.err);
-    }
-
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      return JSON.parse(atob(data.token.split(".")[1])).payload;
-    }
-
-    throw new Error("Invalid response from server");
-  } catch (err) {
-    console.log(err);
-    throw new Error(err);
-  }
-};
-
-export {signUp, signIn}
