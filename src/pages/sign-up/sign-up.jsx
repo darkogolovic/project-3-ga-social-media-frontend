@@ -29,19 +29,11 @@ const SignUp = () => {
     });
   };
 
-    return (
-        <div className='sign'>
-        <div className="mainholder">
-        <Welcome />
-        <div className="container">
-            <div className="box">
-                
-                <h2>Sign Up</h2>
-                <p>Create your account to get started</p>
-                <br/>
-            
 
-    if (formData.password !== formData.confirmPassword) {
+  const handleSubmit = (e) => {
+        e.preventDefault()
+    
+        if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords must match");
       return;
     }
@@ -49,8 +41,11 @@ const SignUp = () => {
     mutate(formData);
     navigate("/verify");
   };
+    
 
   return (
+    <>
+      <div className='sign'>
     <div className="mainholder">
       <Welcome />
       <div className="container">
@@ -118,6 +113,9 @@ const SignUp = () => {
           </form>
         </div>
         </div>
+        </div>
+        </div>
+      </>
     )
 }
 

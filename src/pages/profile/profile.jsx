@@ -7,6 +7,7 @@ const Profile = () => {
   if (isLoading) return <p>Loading...</p>;
 
   return (
+    <>
     <div className='prof'>
     <div className="profile">
       {/* Header sa slikom i osnovnim podacima */}
@@ -14,7 +15,7 @@ const Profile = () => {
 <h2 className="username"    >
     @{user.username}
 </h2>
-
+    <div>
           <div className="profile-info">
             <div className="stats">
               <div className="stat">
@@ -41,7 +42,7 @@ const Profile = () => {
         </div>*/}
       </div>
     </div>
-    </div>
+    </>
   );
 };
 
