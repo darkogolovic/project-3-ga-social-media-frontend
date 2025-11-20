@@ -19,7 +19,7 @@ const router = createBrowserRouter([
   {
     element: <MainLayout />,
     children: [
-      { path: "/profile/:id", element: <Profile/> },
+      { path: "/profile", element: <Profile/> },
       { path: "/feed", element: <FeedPage/> },
       {path:'/verify', element:<Verify />},
       {path:'/conversations',element:<Conversations />}
