@@ -19,8 +19,8 @@ const router = createBrowserRouter([
   {
     element: <MainLayout />,
     children: [
-      { path: "/", element: <Profile/> },
-      { path: "/", element: <FeedPage/> },
+      { path: "/profile/:id", element: <Profile/> },
+      { path: "/feed", element: <FeedPage/> },
       {path:'/verify', element:<Verify />},
       {path:'/conversations',element:<Conversations />}
       

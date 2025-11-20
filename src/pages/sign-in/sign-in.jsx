@@ -1,32 +1,37 @@
 import { useState } from "react";
-import { signIn } from "../../services/authService";
 import './sign.css'
 import Welcome from "../../components/Welcome";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import authService from "../../services/authService";
 
 
 const SignIn = () => {
-    const [message, setMessage] = useState("");
+    const navigate = useNavigate()
+    const {mutate, isLoading}=useMutation({
+        mutationFn: authService.login,
+       onSuccess: (data) => {
+        localStorage.setItem("token", data.token);
+        toast.success(data.message)
+        navigate("/feed");
+        },
+        onError: (data)=>toast.error(data.message)
+    })
+ 
     const [formData, setFormData] = useState({
         username: "",
         password: "",
     });
 
     const handleChange = (evt) => {
-        setMessage("");
         setFormData({ ...formData, [evt.target.name]: evt.target.value });
     };
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
-        console.log("Form submitted:", formData);
-
-        try {
-            const signedInUser = await signIn(formData);
-            setUser(signedInUser);
-            navigate("/");
-        } catch (err) {
-            setMessage(err.message);
-        }
+        
+       mutate(formData)
     };
 
     return (
