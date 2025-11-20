@@ -3,7 +3,7 @@ import authService from "../../services/authService"
 import { useNavigate } from "react-router"
 import toast, { Toaster } from "react-hot-toast"
 import { useState } from "react"
-
+import '../sign-in/sign.css'
 
 
 const Verify = () => {
@@ -32,7 +32,7 @@ const Verify = () => {
  const onResetSubmit = ()=>{}
 
   return (
-    <div className="container">
+    <div className="prof">
       <div className="box">
     <h1 className="verify-title">Verify Your Email</h1>
 
