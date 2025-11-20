@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import "../sign-in/sign.css";
 import toast, { Toaster } from "react-hot-toast";
@@ -28,8 +29,17 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    return (
+        <div className='sign'>
+        <div className="mainholder">
+        <Welcome />
+        <div className="container">
+            <div className="box">
+                
+                <h2>Sign Up</h2>
+                <p>Create your account to get started</p>
+                <br/>
+            
 
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords must match");
@@ -107,10 +117,8 @@ const SignUp = () => {
             </button>
           </form>
         </div>
-      </div>
-      <Toaster />
-    </div>
-  );
-};
+        </div>
+    )
+}
 
 export default SignUp;

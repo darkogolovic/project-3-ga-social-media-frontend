@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import './conversation.css'
+
 
 export default function ConversationList() {
   const [search, setSearch] = useState("");
@@ -47,11 +49,12 @@ export default function ConversationList() {
 
   const styles = {
     container: {
+      height: "80vh",
       width: "100%",
-      maxWidth: 480,
+      maxWidth: "600px",
       margin: "0 auto",
       padding: "10px 16px",
-      boxSizing: "border-box"
+      boxSizing: "border-box",
     },
     search: {
       width: "100%",
@@ -105,6 +108,7 @@ export default function ConversationList() {
   };
 
   return (
+    <div className="prof">
     <div style={styles.container}>
       <input
         type="text"
@@ -129,6 +133,7 @@ export default function ConversationList() {
           </div>
         </div>
       ))}
+    </div>
     </div>
   );
 }

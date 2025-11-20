@@ -7,13 +7,13 @@ const Profile = () => {
   if (isLoading) return <p>Loading...</p>;
 
   return (
-    <>
-      <h2 className="username">@{user.username}</h2>
-      <div>
-        <div className="profile-header">
-          <div className="profile-pic">
-            <img src={'sss'} alt="" />
-          </div>
+    <div className='prof'>
+    <div className="profile">
+      {/* Header sa slikom i osnovnim podacima */}
+
+<h2 className="username"    >
+    @{user.username}
+</h2>
 
           <div className="profile-info">
             <div className="stats">
@@ -40,7 +40,8 @@ const Profile = () => {
           </div>
         </div>*/}
       </div>
-    </>
+    </div>
+    </div>
   );
 };
 
