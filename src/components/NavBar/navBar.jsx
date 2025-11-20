@@ -1,9 +1,26 @@
-import React from 'react'
+import { Link } from "react-router-dom";
+import "./Navbar.css";
 
-const NavBar = () => {
+const Navbar = () => {
   return (
-    <div>NavBar</div>
-  )
-}
+    <nav className="bottom-nav">
+      <Link to="/feed" className="nav-btn">
+        <span className="icon">🏠</span>
+      </Link>
 
-export default NavBar
+      <Link to="/conversations" className="nav-btn oval">
+       💬
+      </Link>
+
+      <Link to="/createPost" className="nav-btn">
+        <span className="icon">➕</span>
+      </Link>
+
+      <Link to="/profile" className="nav-btn oval">
+        👤
+      </Link>
+    </nav>
+  );
+};
+
+export default Navbar;
