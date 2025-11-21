@@ -72,6 +72,14 @@ export const useLikePost = () => {
     },
   });
 };
+ export const useGetComments = (postId) => {
+  return useQuery({
+  queryKey: ["comments", postId],
+  queryFn: () => postService.getComments(postId),
+  enabled: !!postId,
+  staleTime: 1000 * 30,
+});
+};
 
 
 export const useAddComment = (postId) => {
@@ -80,8 +88,7 @@ export const useAddComment = (postId) => {
   return useMutation({
     mutationFn: (data) => postService.addComment(postId, data),
     onSuccess: () => {
-      qc.invalidateQueries(["post", postId]);
-      qc.invalidateQueries(["posts"]);
+      qc.invalidateQueries({ queryKey: ["comments", postId] });
     },
   });
 };

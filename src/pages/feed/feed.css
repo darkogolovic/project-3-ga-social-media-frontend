@@ -196,6 +196,119 @@ body {
 .nav-icon {
   font-size: 22px;
 } 
+/* Modal pozadina */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal box */
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Modal header */
+.modal h2 {
+  margin: 0 0 15px 0;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Lista komentara */
+.comments-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 15px;
+}
+
+.comment-item {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.comment-item strong {
+  margin-right: 5px;
+  color: #333;
+}
+
+/* Dodavanje komentara */
+.add-comment {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.add-comment textarea {
+  flex: 1;
+  resize: none;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  height: 50px;
+}
+
+.add-comment button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-comment button:hover {
+  background: #0056b3;
+}
+
+/* Dugme za zatvaranje modala */
+.close-modal {
+  align-self: center;
+  margin-top: 5px;
+  background: #f0f0f0;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.close-modal:hover {
+  background: #e0e0e0;
+}
+
+/* Opcionalno: stil scroll bara za komentare */
+.comments-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-list::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+.comments-list::-webkit-scrollbar-track {
+  background: transparent;
+}
 
 /* Responsive */
 @media (max-width: 640px) {

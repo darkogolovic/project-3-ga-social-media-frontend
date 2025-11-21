@@ -49,6 +49,13 @@ const postService = {
     const res = await api.delete(`/posts/${id}/comments/${cid}`);
     return res.data;
   },
+  getComments : async (postId) => {
+  const res = await fetch(`/api/posts/${postId}/comments`);
+  if (!res.ok) throw new Error("Failed to fetch comments");
+  return res.json(); 
+  }
+
 };
+
 
 export default postService;
