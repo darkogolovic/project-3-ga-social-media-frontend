@@ -1,48 +1,53 @@
 import "./profile.css";
 import { useCurrentUser } from "../../hooks/useCurrentUser.js";
+import { useMyPosts } from "../../hooks/useMyPosts.js";
 
 const Profile = () => {
   const { data: user, isLoading } = useCurrentUser();
+  const { data: posts, isLoading: postsLoading } = useMyPosts(user?._id);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading || postsLoading) return <p>Loading...</p>;
 
   return (
-    <>
-    <div className='prof'>
-    <div className="profile">
-      {/* Header sa slikom i osnovnim podacima */}
+    <div className="prof">
+      <div className="profile">
+        
+        {/* Profile Header */}
+        <div className="profile-header">
+          <div className="profile-pic">
+            <img src={user.avatar || "/default-avatar.png"} alt="Profile Pic" />
+          </div>
 
-<h2 className="username"    >
-    @{user.username}
-</h2>
-    <div>
           <div className="profile-info">
+            <h2 className="username">@{user.username}</h2>
+
             <div className="stats">
               <div className="stat">
-                <span className="number">24</span>
-                <span className="label">POSTS</span>
+                <div className="number">{posts.length}</div>
+                <div className="label">Posts</div>
               </div>
-              <div className="stat">
-                <span className="number">{user.followers}</span>
-                <button className="button">Edit profile</button>
-              </div>
+              <button className="button">Edit Profile</button>
             </div>
+
+           
           </div>
         </div>
 
-        {/*<div className="posts-section">
+        
+        <div className="posts-section">
           <h2>POSTS</h2>
+
           <div className="posts-grid">
             {posts.map((post) => (
-              <div key={post.id} className="post">
+              <div key={post._id} className="post">
                 <img src={post.image} alt="Post" />
               </div>
             ))}
           </div>
-        </div>*/}
+        </div>
+
       </div>
     </div>
-    </>
   );
 };
 

@@ -5,6 +5,10 @@ const postService = {
     const res = await api.get("/posts");
     return res.data;
   },
+  getUserPosts: async (userId) => {
+    const res = await api.get(`/posts/user/${userId}`);
+    return res.data;
+  },
 
   createPost: async (formData) => {
     const res = await api.post("/posts", formData);
