@@ -74,11 +74,10 @@ export const useLikePost = () => {
 };
  export const useGetComments = (postId) => {
   return useQuery({
-  queryKey: ["comments", postId],
-  queryFn: () => postService.getComments(postId),
-  enabled: !!postId,
-  staleTime: 1000 * 30,
-});
+    queryKey: postId ? ["comments", postId] : ["comments", "empty"],
+    queryFn: () => postService.getComments(postId),
+    enabled: !!postId,
+  });
 };
 
 
