@@ -1,139 +1,64 @@
 import React, { useState } from "react";
-
-
+import { useConversations } from "../../hooks/useConversations";
+import { data } from "react-router";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
 
 export default function ConversationList() {
   const [search, setSearch] = useState("");
+   const { data: user } = useCurrentUser();
+  const { data, isLoading, error } = useConversations(user?._id);
 
-  const conversations = [
-    {
-      id: 1,
-      name: "Alex",
-      status: "Seen Sunday",
-      active: false,
-      avatar: "https://i.pravatar.cc/150?img=11"
-    },
-    {
-      id: 2,
-      name: "Marko",
-      status: "Sent Sunday",
-      active: false,
-      avatar: "https://i.pravatar.cc/150?img=52"
-    },
-    {
-      id: 3,
-      name: "Aleksandar",
-      status: "Sent Sunday",
-      active: false,
-      avatar: "https://i.pravatar.cc/150?img=23"
-    },
-    {
-      id: 4,
-      name: "Marija",
-      status: "Active 8m ago",
-      active: true,
-      avatar: "https://i.pravatar.cc/150?img=44"
-    },
-    {
-      id: 5,
-      name: "Danilo",
-      status: "Active 24m ago",
-      active: true,
-      avatar: "https://i.pravatar.cc/150?img=36"
-    }
-  ];
+  const conversations = Array.isArray(data) ? data : [];
 
   const filtered = conversations.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase())
+    c?.username?.toLowerCase().includes(search.toLowerCase())
   );
 
-  const styles = {
-    container: {
-      height: "80vh",
-      width: "100%",
-      maxWidth: "600px",
-      margin: "0 auto",
-      padding: "10px 16px",
-      boxSizing: "border-box",
-    },
-    search: {
-      width: "100%",
-      padding: "12px 14px",
-      borderRadius: 10,
-      border: "1px solid #ddd",
-      background: "#f1f1f1",
-      fontSize: 14,
-      outline: "none",
-      marginBottom: 16
-    },
-    item: {
-      display: "flex",
-      alignItems: "center",
-      padding: "10px 0",
-      gap: 12,
-      cursor: "pointer",
-      borderBottom: "1px solid #eee"
-    },
-    avatarWrapper: {
-      position: "relative"
-    },
-    avatar: {
-      width: 56,
-      height: 56,
-      borderRadius: "50%",
-      objectFit: "cover"
-    },
-    activeDot: {
-      position: "absolute",
-      right: 3,
-      bottom: 3,
-      width: 14,
-      height: 14,
-      backgroundColor: "#4cd137",
-      borderRadius: "50%",
-      border: "2px solid white"
-    },
-    textBox: {
-      display: "flex",
-      flexDirection: "column"
-    },
-    name: {
-      fontWeight: 600,
-      fontSize: 15
-    },
-    status: {
-      fontSize: 13,
-      color: "#777"
-    }
-  };
+  if (isLoading) return <div className="p-4 text-slate-300">Loading conversations...</div>;
+  if (error) return <div className="p-4 text-red-500">Failed to load conversations</div>;
 
   return (
-    <div className="prof">
-    <div style={styles.container}>
-      <input
-        type="text"
-        placeholder="Search conversations"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={styles.search}
-      />
+    <div className="bg-slate-950 min-h-full px-4 py-6">
+      <div className="max-w-md mx-auto space-y-4">
+        <input
+          type="text"
+          placeholder="Search conversations"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        />
 
-      {filtered.map((c) => (
-        <div key={c.id} style={styles.item}>
-          <div style={styles.avatarWrapper}>
-            <img src={c.avatar} alt={c.name} style={styles.avatar} />
-
-            {/* ACTIVE DOT */}
-            {c.active && <div style={styles.activeDot}></div>}
+        {filtered.length === 0 ? (
+          <div className="text-slate-400 text-center py-10">
+            No conversations found.
           </div>
+        ) : (
+          <div className="space-y-4">
+            {filtered.map((c) => (
+              <div
+                key={c.id}
+                className="flex items-center gap-4 py-3 border-b border-slate-800 cursor-pointer hover:bg-slate-900/40 rounded-xl px-2 transition"
+              >
+                <div className="relative">
+                  <img
+                    src={c.image}
+                    alt={c.username}
+                    className="w-14 h-14 rounded-full object-cover"
+                  />
+                  {c.active && (
+                    <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-400 rounded-full border-2 border-slate-950" />
+                  )}
+                </div>
 
-          <div style={styles.textBox}>
-            <span style={styles.name}>{c.name}</span>
-            <span style={styles.status}>{c.status}</span>
+                <div className="flex flex-col">
+                  <span className="text-slate-100 font-semibold text-sm">{c.username}</span>
+                  <span className="text-slate-400 text-xs">{c.status}</span>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
+        )}
+      </div>
     </div>
   );
 }
