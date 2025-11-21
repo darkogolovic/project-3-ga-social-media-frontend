@@ -40,7 +40,7 @@ const FeedPage = () => {
             className="signout-btn"
             onClick={() => {
               localStorage.removeItem("token");
-              window.location.href = "/login";
+              window.location.href = "/";
             }}
           >
             SIGN OUT
