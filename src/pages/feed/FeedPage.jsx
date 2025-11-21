@@ -6,11 +6,12 @@ import { useCurrentUser } from "../../hooks/useCurrentUser";
 const FALLBACK_IMG = "/mnt/data/61f28f3a-97a5-4733-b561-87747613dfd3.png";
 
 const FeedPage = () => {
+  
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfinitePosts();
   const likeMutation = useLikePost();
   const containerRef = useRef(null);
   const {data:user}=useCurrentUser()
-  console.log(user)
+ 
 
   const posts = data?.pages?.flatMap(p => p.posts ?? []) ?? [];
   const userId = localStorage.getItem("userId");
@@ -40,7 +41,7 @@ const FeedPage = () => {
             className="signout-btn"
             onClick={() => {
               localStorage.removeItem("token");
-              window.location.href = "/login";
+              window.location.href = "/";
             }}
           >
             SIGN OUT
@@ -48,7 +49,7 @@ const FeedPage = () => {
         </div>
 
         <div className="profile-row">
-          <h1>{user?.username || "Profile"}</h1>
+          <h1>{ posts[0]?.author?.username || "Profile"}</h1>
           <button className="edit-btn">EDIT / DELETE</button>
         </div>
 
@@ -61,7 +62,7 @@ const FeedPage = () => {
                 <img src={post.image || FALLBACK_IMG} alt={post.content?.slice(0,50) || "Post"} />
               </div>
               <div className="caption">
-                <strong>{post.author?.username || "Unknown"}</strong>
+                <strong>{ post.author?.username || "Unknown"}</strong>
                 <p>{post.content}</p>
               </div>
               <div className="actions">

@@ -12,7 +12,7 @@ const Profile = () => {
     <div className="prof">
       <div className="profile">
         
-        {/* Profile Header */}
+     
         <div className="profile-header">
           <div className="profile-pic">
             <img src={user.avatar || "/default-avatar.png"} alt="Profile Pic" />
