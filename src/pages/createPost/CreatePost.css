@@ -1,0 +1,239 @@
+/* CreatePost.css */
+.create-post {
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 20px;
+}
+
+.create-post-container {
+  width: 100%;
+  background: rgba(26, 26, 46, 0.95);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2d3748;
+}
+
+/* Header */
+.post-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.post-header h1 {
+  font-size: 28px;
+  color: #4fd1c7;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.post-header p {
+  color: #a0aec0;
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Upload Section */
+.upload-section {
+  margin-bottom: 30px;
+}
+
+.upload-section h2 {
+  color: #e6e6e6;
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.upload-area {
+  border: 2px dashed #4a5568;
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: rgba(45, 55, 72, 0.3);
+}
+
+.upload-area:hover {
+  border-color: #4fd1c7;
+  background: rgba(45, 55, 72, 0.5);
+}
+
+.upload-placeholder {
+  cursor: pointer;
+  color: #a0aec0;
+}
+
+.upload-placeholder i {
+  font-size: 48px;
+  margin-bottom: 15px;
+  color: #4fd1c7;
+}
+
+.upload-placeholder p {
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  color: #e6e6e6;
+}
+
+.upload-placeholder span {
+  font-size: 14px;
+  color: #a0aec0;
+}
+
+/* Image Preview */
+.image-preview {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.image-preview img {
+  max-width: 300px;
+  max-height: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.remove-image {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 30px;
+  height: 30px;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.remove-image:hover {
+  background: #c53030;
+  transform: scale(1.1);
+}
+
+/* Caption Section */
+.caption-section {
+  margin-bottom: 30px;
+}
+
+.caption-section h2 {
+  color: #e6e6e6;
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.caption-input {
+  position: relative;
+}
+
+.caption-input textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 20px;
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 15px;
+  color: #e6e6e6;
+  font-size: 16px;
+  resize: vertical;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.caption-input textarea::placeholder {
+  color: #a0aec0;
+}
+
+.caption-input textarea:focus {
+  border-color: #4fd1c7;
+  box-shadow: 0 0 15px rgba(79, 209, 199, 0.2);
+}
+
+.char-count {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  color: #a0aec0;
+  font-size: 12px;
+}
+
+/* Action Section */
+.action-section {
+  text-align: center;
+}
+
+.create-btn {
+  padding: 15px 40px;
+  background: linear-gradient(135deg, #4fd1c7, #38b2ac);
+  color: #1a202c;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.create-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(79, 209, 199, 0.3);
+}
+
+.create-btn:disabled {
+  background: #4a5568;
+  color: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .create-post {
+    padding: 10px;
+    align-items: flex-start;
+  }
+
+  .create-post-container {
+    padding: 30px 20px;
+  }
+
+  .post-header h1 {
+    font-size: 24px;
+  }
+
+  .upload-area {
+    padding: 20px;
+  }
+
+  .image-preview img {
+    max-width: 100%;
+  }
+
+  .create-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
