@@ -9,6 +9,7 @@ import Verify from "./pages/verify/Verify";
 import Conversations from "./pages/conversation/Conversations";
 import CreatePost from "./pages/createPost/CreatePost";
 import Messages from "./pages/messages/messages";
+import EditProfile from "./pages/edit/EditProfile";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,8 @@ const router = createBrowserRouter([
       { path: "/feed", element: <FeedPage/> },
       {path:'/conversations',element:<Conversations />},
       {path: '/createPost',element:<CreatePost />},
-      {path: '/messages',element:<Messages />}
+      {path: '/messages',element:<Messages />},
+      {path: '/editProfile',element:<EditProfile/>}
       
     ],
   },

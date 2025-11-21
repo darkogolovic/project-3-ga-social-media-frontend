@@ -49,8 +49,8 @@ const FeedPage = () => {
         </div>
 
         <div className="profile-row">
-          <h1>{ posts[0]?.author?.username || "Profile"}</h1>
-          <button className="edit-btn">EDIT / DELETE</button>
+          <h1>@{ posts[0]?.author?.username || "Profile"}</h1>
+         { posts[0]?.author?.username=== user?.username ? <button className="edit-btn">EDIT / DELETE</button>:null}
         </div>
 
         <div className="post-scroll-container" ref={containerRef}>
