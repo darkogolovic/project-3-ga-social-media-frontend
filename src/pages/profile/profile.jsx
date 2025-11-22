@@ -22,12 +22,12 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col items-center px-4 py-6">
       <div className="w-full max-w-4xl space-y-6">
-        {/* Header */}
+        
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-slate-900/70 border border-slate-800 rounded-3xl px-5 py-5 shadow-2xl shadow-black/60 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800 flex items-center justify-center">
               <img
-                src={user.avatar || FALLBACK_AVATAR}
+                src={user?.profilePicture || FALLBACK_AVATAR}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
@@ -35,18 +35,18 @@ const Profile = () => {
 
             <div className="space-y-1">
               <h1 className="text-xl sm:text-2xl font-semibold break-all">
-                @{user.username}
+                @{user?.username}
               </h1>
-              {user.email && (
+              {user?.email && (
                 <p className="text-xs sm:text-sm text-slate-400 break-all">
-                  {user.email}
+                  {user?.email}
                 </p>
               )}
               <p className="text-xs text-slate-500">
                 Member since{" "}
-                {user.createdAt &&
+                {user?.createdAt &&
                   !isNaN(new Date(user.createdAt)) &&
-                  new Date(user.createdAt).toLocaleDateString()}
+                  new Date(user?.createdAt).toLocaleDateString()}
               </p>
             </div>
           </div>

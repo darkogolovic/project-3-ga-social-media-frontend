@@ -6,6 +6,7 @@ import {
   useAddComment,
 } from "../../hooks/usePosts";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
+import { Link } from "react-router";
 
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80";
@@ -32,6 +33,7 @@ const FeedPage = () => {
     refetch: refetchComments,
     isLoading: commentsLoading,
   } = useGetComments(selectedPostId);
+ 
 
   const addCommentMutation = useAddComment(selectedPostId);
 
@@ -39,7 +41,7 @@ const FeedPage = () => {
     if (selectedPostId) refetchComments();
   }, [selectedPostId]);
 
-  // infinite scroll
+  
   useEffect(() => {
     const handleScroll = () => {
       const nearBottom =
@@ -70,9 +72,9 @@ const FeedPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col items-center px-4 py-6">
-      {/* TOP BAR – više responsivan */}
+      
       <header className="w-full max-w-6xl mb-6 md:mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        {/* Logo + naslov */}
+        
         <div className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-2xl bg-sky-500 flex items-center justify-center font-black text-slate-950 shadow-lg shadow-sky-500/40">
             C
@@ -85,9 +87,10 @@ const FeedPage = () => {
           </div>
         </div>
 
-        {/* User info + sign out – stack na mobitelu */}
+       
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 md:justify-end">
           {user && (
+            <Link to={'/editProfile'}>
             <div className="flex items-center gap-3">
               <div className="flex flex-col items-start sm:items-end">
                 <span className="text-sm font-medium break-all">
@@ -103,6 +106,7 @@ const FeedPage = () => {
                 {user.username?.[0] || "U"}
               </div>
             </div>
+            </Link>
           )}
 
           <button
@@ -117,7 +121,7 @@ const FeedPage = () => {
         </div>
       </header>
 
-      {/* PROFILE SECTION – responsivnije poravnanje */}
+      
       {posts.length > 0 && (
         <section className="w-full max-w-2xl mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-slate-900/60 border border-slate-800 rounded-2xl px-5 py-4 backdrop-blur-md shadow-xl shadow-black/40">
           <div className="flex items-center gap-3 sm:gap-4">
@@ -181,7 +185,7 @@ const FeedPage = () => {
               key={post._id}
               className="relative bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl shadow-black/70"
             >
-              {/* Header */}
+              
               <header className="flex items-center justify-between px-4 pt-3 pb-2">
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center text-[11px] font-semibold uppercase border border-slate-700">
