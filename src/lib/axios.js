@@ -6,14 +6,21 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  
-  if (!["/register", "/login","/verify"].includes(config.url)) {
+  console.log("AXIOS URL:", config.url);
+  console.log("AXIOS TOKEN:", localStorage.getItem("token"));
+
+  const publicRoutes = ["/register", "/login", "/verify"];
+
+  if (!publicRoutes.some((route) => config.url.includes(route))) {
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
   }
+
+  console.log("AXIOS AUTH HEADER SENT:", config.headers.Authorization);
   return config;
 });
+
 
 export default api;

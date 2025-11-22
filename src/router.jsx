@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       { path: "/feed", element: <FeedPage/> },
       {path:'/conversations',element:<Conversations />},
       {path: '/createPost',element:<CreatePost />},
-      {path: '/messages',element:<Messages />},
+      {path: '/messages/:conversationId',element:<Messages />},
       {path: '/editProfile',element:<EditProfile/>}
       
     ],
