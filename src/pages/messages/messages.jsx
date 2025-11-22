@@ -1,262 +1,119 @@
-// // MessageChat.js
-// import React, { useState, useRef, useEffect } from 'react';
-// import './messages.css';
-
-// const MessageChat = () => {
-//   const [messages, setMessages] = useState([
-//     { id: 1, text: "Hey! How are you doing?", sender: "other", time: "10:30 AM" },
-//     { id: 2, text: "I'm good! Just working on some projects.", sender: "me", time: "10:31 AM" },
-//     { id: 3, text: "That's great! Want to meet up later?", sender: "other", time: "10:32 AM" },
-//     { id: 4, text: "Sure, let's meet at the usual place.", sender: "me", time: "10:33 AM" }
-//   ]);
-  
-//   const [newMessage, setNewMessage] = useState('');
-//   const [isSummarizing, setIsSummarizing] = useState(false);
-//   const messagesEndRef = useRef(null);
-
-//   const scrollToBottom = () => {
-//     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-//   };
-
-//   useEffect(() => {
-//     scrollToBottom();
-//   }, [messages]);
-
-//   const handleSendMessage = (e) => {
-//     e.preventDefault();
-//     if (newMessage.trim() === '') return;
-
-//     const newMsg = {
-//       id: messages.length + 1,
-//       text: newMessage,
-//       sender: "me",
-//       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-//     };
-
-//     setMessages([...messages, newMsg]);
-//     setNewMessage('');
-//   };
-
-//   const handleSummarize = () => {
-//     setIsSummarizing(true);
-//     // Simulacija AI sumarizacije
-//     setTimeout(() => {
-//       alert("Chat Summary:\n- Planning to meet up\n- Discussing work projects\n- Meeting at usual place");
-//       setIsSummarizing(false);
-//     }, 1000);
-//   };
-
-//   return (
-//     <div className="message-chat">
-//       {/* Header */}
-//       <div className="chat-header">
-//         <div className="user-info">
-//           <div className="user-avatar">
-//             <img src="https://via.placeholder.com/40" alt="User" />
-//           </div>
-//           <div className="user-details">
-//             <h2>@otheruser</h2>
-//             <span className="online-status">Online</span>
-//           </div>
-//         </div>
-//         <button className="profile-btn">PROFILE</button>
-//       </div>
-
-//       {/* Chat Messages */}
-//       <div className="messages-container">
-//         {messages.map((message) => (
-//           <div
-//             key={message.id}
-//             className={`message ${message.sender === 'me' ? 'my-message' : 'other-message'}`}
-//           >
-//             <div className="message-bubble">
-//               <p>{message.text}</p>
-//               <span className="message-time">{message.time}</span>
-// <div className="summarize-section">
-//         <button 
-//           className="summarize-btn"
-//           onClick={handleSummarize}
-//           disabled={isSummarizing}
-//         >
-//           {isSummarizing ? 'SUMMARIZING...' : 'SUMMARIZE'}
-//         </button>
-//       </div>
-
-//             </div>
-//           </div>
-//         ))}
-//         <div ref={messagesEndRef} />
-//       </div>
-
-//       {/* Summarize Button */}
-      
-
-//       {/* Message Input */}
-//       <form className="message-input-form" onSubmit={handleSendMessage}>
-//         <div className="input-container">
-//           <input
-//             type="text"
-//             value={newMessage}
-//             onChange={(e) => setNewMessage(e.target.value)}
-//             placeholder="Type your message..."
-//             className="message-input"
-//           />
-//           <button type="submit" className="send-btn">
-//             SEND
-//           </button>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default MessageChat;
-
-
-// MessageChat.js
-import React, { useState, useRef, useEffect } from 'react';
-import './messages.css';
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { useMessages, useSendMessage } from "../../hooks/useMessages";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
+import { io } from "socket.io-client";
 
 const Messages = () => {
-  const [messages, setMessages] = useState([
-    { 
-      id: 1, 
-      text: "Hey! How are you doing? I was thinking we could meet up this weekend to discuss the new project. There are so many details we need to go over and I think it would be really productive if we could sit down together for a few hours.", 
-      sender: "other", 
-      time: "10:30 AM",
-      showSummarize: false
-    },
-    { 
-      id: 2, 
-      text: "I'm good! Just working on some projects.", 
-      sender: "me", 
-      time: "10:31 AM",
-      showSummarize: false
-    },
-    { 
-      id: 3, 
-      text: "That's great! Want to meet up later? I found this amazing new coffee shop that just opened downtown. They have the best espresso and plenty of quiet space where we could work without interruptions.", 
-      sender: "other", 
-      time: "10:32 AM",
-      showSummarize: true
-    },
-    { 
-      id: 4, 
-      text: "Sure, let's meet at the usual place. I'll bring all the documents and we can go through everything step by step. Also, I wanted to show you the new design mockups I've been working on - they're really exciting!", 
-      sender: "me", 
-      time: "10:33 AM",
-      showSummarize: true
-    }
-  ]);
-  
-  const [newMessage, setNewMessage] = useState('');
-  const [isSummarizing, setIsSummarizing] = useState(false);
-  const messagesEndRef = useRef(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  const { conversationId } = useParams(); // dolazi iz rute
+  const { data: user } = useCurrentUser();
+  const { data: messages = [], refetch, isLoading } = useMessages(conversationId);
+  const sendMessageMutation = useSendMessage();
+  const [newMessage, setNewMessage] = useState("");
+  const messagesEndRef = useRef();
+  const socketRef = useRef();
+console.log(messages)
+  // Socket connection
   useEffect(() => {
-    scrollToBottom();
+    if (!conversationId) return;
+
+    socketRef.current = io("http://localhost:3000");
+    socketRef.current.emit("joinRoom", conversationId);
+
+    socketRef.current.on("receiveMessage", (msg) => {
+      refetch(); // refresh messages
+    });
+
+    return () => socketRef.current.disconnect();
+  }, [conversationId, refetch]);
+
+  // Auto scroll
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSendMessage = (e) => {
+  // Send message
+  const handleSend = (e) => {
     e.preventDefault();
-    if (newMessage.trim() === '') return;
+    if (!newMessage.trim() || !conversationId || !user?._id) return;
 
-    const newMsg = {
-      id: messages.length + 1,
-      text: newMessage,
-      sender: "me",
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      showSummarize: newMessage.length > 100
-    };
+    sendMessageMutation.mutate(
+      {
+        conversationId,
+        sender: user._id,
+        text: newMessage,
+      },
+      {
+        onSuccess: (savedMessage) => {
+          socketRef.current.emit("sendMessage", savedMessage);
+        },
+      }
+    );
 
-    setMessages([...messages, newMsg]);
-    setNewMessage('');
+    setNewMessage("");
   };
 
-  const handleSummarize = (messageId) => {
-    setIsSummarizing(true);
-    
-    // Pronađi poruku za sumarizaciju
-    const messageToSummarize = messages.find(msg => msg.id === messageId);
-    
-    // Simulacija AI sumarizacije
-    setTimeout(() => {
-      const summary = `Summary: "${messageToSummarize.text.substring(0, 50)}..."\nKey points: Meeting plans, project discussion`;
-      alert(summary);
-      setIsSummarizing(false);
-    }, 1000);
-  };
+  if (!conversationId) {
+    return <p className="text-slate-400 p-4">No conversation selected</p>;
+  }
 
   return (
-    <div className="sign">
-
-    
-    <div className="message-chat">
-      {/* Header */}
-      <div className="chat-header">
-        <div className="user-info">
-          <div className="user-avatar">
-            <img src="https://via.placeholder.com/40" alt="User" />
-          </div>
-          <div className="user-details">
-            <h2>@otheruser</h2>
-            <span className="online-status">Online</span>
-          </div>
-        </div>
-        <button className="profile-btn">PROFILE</button>
-      </div>
-
-      {/* Chat Messages */}
-      <div className="messages-container">
-        {messages.map((message) => (
-          <div key={message.id}>
-            <div
-              className={`message ${message.sender === 'me' ? 'my-message' : 'other-message'}`}
-            >
-              <div className="message-bubble">
-                <p>{message.text}</p>
-                <span className="message-time">{message.time}</span>
-              </div>
-              {/* Summarize Button - samo za moje duge poruke */}
-            {message.sender === 'other' && message.showSummarize && (
-              <div className="summarize-container">
-                <button 
-                  className="summarize-btn"
-                  onClick={() => handleSummarize(message.id)}
-                  disabled={isSummarizing}
+    <div className="h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+      <div className="flex flex-col h-[80vh] w-full max-w-2xl bg-slate-900 rounded-3xl shadow-lg overflow-hidden">
+        {/* Messages Container */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-thumb-sky-500 scrollbar-track-slate-700">
+          {isLoading ? (
+            <p className="text-slate-400 text-center mt-10">Loading messages...</p>
+          ) : messages.length === 0 ? (
+            <p className="text-slate-400 text-center mt-10">No messages yet.</p>
+          ) : (
+            messages.map((msg) => (
+              <div
+                key={msg._id}
+                className={`flex ${msg.sender === user._id ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={`max-w-xs sm:max-w-md px-4 py-2 rounded-2xl break-words ${
+                    msg.sender === user._id
+                      ? "bg-sky-500 text-white rounded-tr-none"
+                      : "bg-slate-700 text-slate-100 rounded-tl-none"
+                  }`}
                 >
-                  {isSummarizing ? '📝 Summarizing...' : '📝 Summarize'}
-                </button>
+                  <p className="text-sm">{msg.text}</p>
+                  <span className="text-xs text-slate-400 block mt-1 text-right">
+                    {new Date(msg.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
               </div>
-            )}
-            </div>
-            
-            
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
+            ))
+          )}
+          <div ref={messagesEndRef} />
+        </div>
 
-      {/* Message Input */}
-      <form className="message-input-form" onSubmit={handleSendMessage}>
-        <div className="input-container">
+        {/* Input */}
+        <form
+          onSubmit={handleSend}
+          className="flex items-center gap-2 px-4 py-3 border-t border-slate-700 bg-slate-800"
+        >
           <input
             type="text"
+            placeholder="Type a message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="message-input"
+            className="flex-1 px-4 py-2 rounded-2xl border border-slate-600 bg-slate-900 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
           />
-          <button type="submit" className="send-btn">
-            SEND
+          <button
+            type="submit"
+            disabled={sendMessageMutation.isLoading}
+            className="px-4 py-2 bg-sky-500 text-white rounded-2xl font-semibold hover:bg-sky-400 transition disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            Send
           </button>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
     </div>
   );
 };

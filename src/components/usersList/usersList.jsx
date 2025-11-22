@@ -1,42 +1,46 @@
-import React, { useState } from "react";
-import { useUsers } from "../../hooks/useUsers";
+import { useUsers } from '../../hooks/useUsers';
+import { useNavigate } from 'react-router-dom';
+import conversationService from '../../services/conversationService';
 
-export default function UsersList() {
-  const [search, setSearch] = useState("");
+const UsersList = ({ currentUser }) => {
+  const { data: users = [], isLoading } = useUsers();
+  const navigate = useNavigate();
 
-  const { data: users = [], isLoading, error } = useUsers();
+  if (isLoading) return <p className="text-slate-400 p-4">Loading users...</p>;
 
-  const filtered = users?.filter((u) =>
-    u.username.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleUserClick = async (user) => {
+    if (!currentUser) return;
+
+    // 1. Pronađi ili kreiraj konverzaciju
+    const conversation = await conversationService.createConversation([currentUser._id, user._id]);
+
+    // 2. Navigiraj na stranicu poruka
+    navigate(`/messages/${conversation._id}`, { state: { otherUser: user } });
+  };
 
   return (
-    <div className="p-4 max-w-md mx-auto h-[80vh] overflow-y-auto">
-      <input
-        type="text"
-        placeholder="Search users"
-        className="w-full p-3 rounded-xl bg-gray-100 border border-gray-300 mb-4 text-sm"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-
-      {isLoading && <p className="text-gray-500">Loading...</p>}
-      {error && <p className="text-red-500">Failed to load users.</p>}
-
-      {filtered.map((u) => (
-        <div
-          key={u.id}
-          className="flex items-center gap-3 py-2 border-b border-gray-200 cursor-pointer"
-        >
-          <img
-            src={u.image}
-            alt={u.username}
-            className="w-14 h-14 rounded-full object-cover"
-          />
-
-          <span className="font-semibold text-[15px]">{u.username}</span>
-        </div>
-      ))}
+    <div className="p-4">
+      <h2 className="text-lg font-semibold text-slate-100 mb-2">Users</h2>
+      <div className="flex flex-col gap-2">
+        {users
+          .filter(u => u._id !== currentUser?._id)
+          .map(user => (
+            <button
+              key={user._id}
+              onClick={() => handleUserClick(user)}
+              className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-700 transition"
+            >
+              <img
+                src={user.image || "https://via.placeholder.com/40"}
+                alt={user.username}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+              <span className="text-slate-100">{user.username}</span>
+            </button>
+          ))}
+      </div>
     </div>
   );
-}
+};
+
+export default UsersList;
