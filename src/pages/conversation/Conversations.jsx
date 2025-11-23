@@ -32,6 +32,7 @@ const Conversations = () => {
           selectedConversation={selectedConversation} 
           setSelectedConversation={setSelectedConversation} 
           setOtherUser={setOtherUser} 
+          otherUser={otherUser}
         />
       </div>
 

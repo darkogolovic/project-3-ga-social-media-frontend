@@ -4,9 +4,12 @@ import {
   useLikePost,
   useGetComments,
   useAddComment,
+  useEditComment,
+  useDeleteComment,
 } from "../../hooks/usePosts";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { Link } from "react-router";
+import toast from "react-hot-toast";
 
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80";
@@ -23,6 +26,10 @@ const FeedPage = () => {
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [newComment, setNewComment] = useState("");
 
+  
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editCommentText, setEditCommentText] = useState("");
+
   const {
     data: comments = [],
     refetch: refetchComments,
@@ -30,10 +37,12 @@ const FeedPage = () => {
   } = useGetComments(selectedPostId);
 
   const addCommentMutation = useAddComment(selectedPostId);
+  const editCommentMutation = useEditComment();
+  const deleteCommentMutation = useDeleteComment();
 
   useEffect(() => {
     if (selectedPostId) refetchComments();
-  }, [selectedPostId]);
+  }, [selectedPostId, refetchComments]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,57 +72,116 @@ const FeedPage = () => {
     );
   };
 
+ 
+
+  const startEditingComment = (comment) => {
+    setEditingCommentId(comment._id);
+    setEditCommentText(comment.text);
+  };
+
+  const cancelEditingComment = () => {
+    setEditingCommentId(null);
+    setEditCommentText("");
+  };
+
+  const handleSaveEditedComment = () => {
+    if (!editCommentText.trim() || !editingCommentId || !selectedPostId) return;
+
+    editCommentMutation.mutate(
+      {
+        postId: selectedPostId,
+        commentId: editingCommentId,
+        data: { text: editCommentText },
+      },
+      {
+        onSuccess: () => {
+          cancelEditingComment();
+         
+        },
+      }
+    );
+  };
+
+  const handleDeleteComment = (commentId) => {
+    if (!selectedPostId) return;
+
+    deleteCommentMutation.mutate(
+      { postId: selectedPostId, commentId },
+      {
+        onSuccess: () => {
+          toast.success('Comment deleted')
+        },
+      }
+    );
+  };
+
+  const handleCloseCommentsModal = () => {
+    setSelectedPostId(null);
+    setEditingCommentId(null);
+    setEditCommentText("");
+    setNewComment("");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col items-center px-4 py-6">
-      <header className="w-full max-w-6xl mb-6 md:mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-2">
-          <div className="h-9 w-9 rounded-2xl bg-sky-500 flex items-center justify-center font-black text-slate-950 shadow-lg shadow-sky-500/40">
-            C
-          </div>
-          <div>
-            <div className="text-xl font-semibold tracking-wide">CIRCLE</div>
-            <p className="text-xs text-slate-400">
-              Social feed for your close circle
-            </p>
-          </div>
+    <header className="w-full max-w-6xl mb-6 md:mb-8">
+  <div className="flex items-center justify-between gap-3 flex-wrap">
+  
+    <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+      <div className="h-9 w-9 rounded-2xl bg-sky-500 flex items-center justify-center font-black text-slate-950 shadow-lg shadow-sky-500/40">
+        C
+      </div>
+      <div className="min-w-0">
+        <div className="text-lg sm:text-xl font-semibold tracking-wide">
+          CIRCLE
         </div>
+       
+        <p className="hidden xs:block text-[11px] sm:text-xs text-slate-400">
+          Social feed for your close circle
+        </p>
+      </div>
+    </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 md:justify-end">
-          {user && (
-            <Link to={"/editProfile"}>
-              <div className="flex items-center gap-3">
-                <div className="flex flex-col items-start sm:items-end">
-                  <span className="text-sm font-medium break-all">
-                    @{user.username}
-                  </span>
-                  {user.email && (
-                    <span className="hidden sm:inline text-xs text-slate-400 truncate max-w-[180px] md:max-w-[220px]">
-                      {user.email}
-                    </span>
-                  )}
-                </div>
-                <div className="h-9 w-9 rounded-full overflow-hidden">
-                  <img
-                    src={user.profilePicture || FALLBACK_IMG}
-                    alt={user.username}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              </div>
-            </Link>
-          )}
+    <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+      {user && (
+        <Link to={"/editProfile"} className="min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="flex flex-col items-end min-w-0">
+             
+              <span className="text-sm font-medium truncate max-w-[120px] sm:max-w-[180px] md:max-w-[220px]">
+                @{user.username}
+              </span>
+             
+              {user.email && (
+                <span className="hidden md:inline text-[11px] text-slate-400 truncate max-w-[180px]">
+                  {user.email}
+                </span>
+              )}
+            </div>
+            <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-full overflow-hidden flex-shrink-0">
+              <img
+                src={user.profilePicture || FALLBACK_IMG}
+                alt={user.username}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+        </Link>
+      )}
 
-          <button
-            className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-sky-500/90 hover:bg-sky-400 text-slate-950 px-4 py-2 rounded-full text-sm font-semibold shadow-lg shadow-sky-500/40 transition hidden md:block"
-            onClick={() => {
-              localStorage.removeItem("token");
-              window.location.href = "/";
-            }}
-          >
-            <span>Sign out</span>
-          </button>
-        </div>
-      </header>
+    
+      <button
+        className="hidden md:inline-flex items-center justify-center gap-2 bg-sky-500/90 hover:bg-sky-400 text-slate-950 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg shadow-sky-500/40 transition"
+        onClick={() => {
+          localStorage.removeItem("token");
+          window.location.href = "/";
+        }}
+      >
+        <span>Sign out</span>
+      </button>
+    </div>
+  </div>
+</header>
 
       {posts.length > 0 && (
         <section className="w-full max-w-2xl mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-slate-900/60 border border-slate-800 rounded-2xl px-5 py-4 backdrop-blur-md shadow-xl shadow-black/40">
@@ -208,7 +276,6 @@ const FeedPage = () => {
                 <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950/80 via-slate-950/0 pointer-events-none" />
               </div>
 
-              {/* Sadržaj + akcije */}
               <div className="px-4 pb-3 pt-2 flex flex-col gap-2">
                 {post.content && (
                   <p className="text-sm text-slate-100 leading-relaxed line-clamp-3">
@@ -259,13 +326,12 @@ const FeedPage = () => {
         )}
       </main>
 
-     
       {selectedPostId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
           <div className="relative w-full max-w-lg bg-slate-950/95 border border-slate-800 rounded-3xl p-6 shadow-2xl shadow-black/70">
             <button
               className="absolute top-3 right-3 text-slate-400 hover:text-slate-100 text-lg font-bold"
-              onClick={() => setSelectedPostId(null)}
+              onClick={handleCloseCommentsModal}
             >
               ✕
             </button>
@@ -283,24 +349,88 @@ const FeedPage = () => {
                 <p className="text-sm text-slate-400">No comments yet.</p>
               )}
               {!commentsLoading &&
-                comments.map((comment) => (
-                  <div
-                    key={comment._id}
-                    className="flex items-start gap-3 bg-slate-900/80 border border-slate-800 rounded-2xl px-3 py-2"
-                  >
-                    <div className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-semibold uppercase border border-slate-700">
-                      {comment.author?.username?.[0] || "U"}
-                    </div>
-                    <div>
-                      <div className="text-xs font-semibold">
-                        @{comment.author?.username || "unknown"}
+                comments.map((comment) => {
+                  const isOwnComment =
+                    comment.author?._id === userId ||
+                    comment.author?._id === user?._id;
+
+                  const isEditing = editingCommentId === comment._id;
+
+                  return (
+                    <div
+                      key={comment._id}
+                      className="flex items-start gap-3 bg-slate-900/80 border border-slate-800 rounded-2xl px-3 py-2"
+                    >
+                      <div className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-semibold uppercase border border-slate-700">
+                        {comment.author?.username?.[0] || "U"}
                       </div>
-                      <div className="text-xs text-slate-200">
-                        {comment.text}
+
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="text-xs font-semibold">
+                            @{comment.author?.username || "unknown"}
+                          </div>
+
+                          {isOwnComment && !isEditing && (
+                            <div className="flex items-center gap-2">
+                              <button
+                                className="text-[11px] text-sky-400 hover:text-sky-300"
+                                onClick={() => startEditingComment(comment)}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                className="text-[11px] text-rose-400 hover:text-rose-300"
+                                onClick={() =>
+                                  handleDeleteComment(comment._id)
+                                }
+                                disabled={deleteCommentMutation.isLoading}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
+                        {!isEditing && (
+                          <div className="text-xs text-slate-200 mt-0.5">
+                            {comment.text}
+                          </div>
+                        )}
+
+                        {isEditing && (
+                          <div className="mt-1 space-y-1">
+                            <textarea
+                              value={editCommentText}
+                              onChange={(e) =>
+                                setEditCommentText(e.target.value)
+                              }
+                              rows={2}
+                              className="w-full text-xs p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 resize-none focus:outline-none focus:ring-1 focus:ring-sky-500/70 focus:border-sky-500/70"
+                            />
+                            <div className="flex justify-end gap-2">
+                              <button
+                                className="px-2 py-1 rounded-xl text-[11px] bg-slate-800 text-slate-200 hover:bg-slate-700"
+                                onClick={cancelEditingComment}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="px-3 py-1 rounded-xl text-[11px] bg-sky-500 text-slate-950 font-semibold hover:bg-sky-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                                onClick={handleSaveEditedComment}
+                                disabled={editCommentMutation.isLoading}
+                              >
+                                {editCommentMutation.isLoading
+                                  ? "Saving..."
+                                  : "Save"}
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
             </div>
 
             <div className="flex gap-2">

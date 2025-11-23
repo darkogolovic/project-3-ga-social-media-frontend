@@ -3,8 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useMessages, useSendMessage, useSummarizeMessage } from "../../hooks/useMessages";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
-
-import { io } from "socket.io-client";
+import { socket } from "../../socket";
 
 const Messages = () => {
   const { conversationId } = useParams();
@@ -16,20 +15,23 @@ const Messages = () => {
   const messagesEndRef = useRef();
   const socketRef = useRef();
 
-  // Socket.io connection
+  
   useEffect(() => {
-    if (!conversationId) return;
+  if (!conversationId) return;
 
-    socketRef.current = io("http://localhost:3000");
-    socketRef.current.emit("joinRoom", conversationId);
+  socket.connect();
 
-    socketRef.current.on("receiveMessage", () => {
-      refetch();
-    });
+  socket.emit("joinRoom", conversationId);
 
-    return () => socketRef.current.disconnect();
-  }, [conversationId, refetch]);
+  socket.on("receiveMessage", () => {
+    refetch();
+  });
 
+  return () => {
+    socket.off("receiveMessage");
+    socket.emit("leaveRoom", conversationId);
+  };
+}, [conversationId, refetch]);
  
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

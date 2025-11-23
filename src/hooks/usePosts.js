@@ -74,9 +74,9 @@ export const useLikePost = () => {
 };
  export const useGetComments = (postId) => {
   return useQuery({
-    queryKey: postId ? ["comments", postId] : ["comments", "empty"],
-    queryFn: () => postService.getComments(postId),
+    queryKey: ["comments", postId],
     enabled: !!postId,
+    queryFn: () => postService.getComments(postId),
   });
 };
 
@@ -93,25 +93,29 @@ export const useAddComment = (postId) => {
 };
 
 
-export const useEditComment = (postId, commentId) => {
+export const useEditComment = () => {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: (data) => postService.editComment(postId, commentId, data),
-    onSuccess: () => {
-      qc.invalidateQueries(["post", postId]);
+    mutationFn: ({ postId, commentId, data }) =>
+      postService.editComment(postId, commentId, data),
+    onSuccess: (_, variables) => {
+      qc.invalidateQueries({ queryKey: ["comments", variables.postId] });
     },
   });
 };
 
 
-export const useDeleteComment = (postId) => {
+export const useDeleteComment = () => {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: (commentId) => postService.deleteComment(postId, commentId),
-    onSuccess: () => {
-      qc.invalidateQueries(["post", postId]);
+    mutationFn: ({ postId, commentId }) =>
+      postService.deleteComment(postId, commentId),
+    onSuccess: (_, variables) => {
+      qc.invalidateQueries({ queryKey: ["comments", variables.postId] });
     },
   });
 };
+
+

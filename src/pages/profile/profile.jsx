@@ -3,9 +3,8 @@ import { useCurrentUser } from "../../hooks/useCurrentUser.js";
 import { useMyPosts } from "../../hooks/useMyPosts.js";
 import { Link } from "react-router"
 
-const FALLBACK_AVATAR =
-  "https://ui-avatars.com/api/?name=C+User&background=0f172a&color=f9fafb";
-
+const FALLBACK_IMG =
+  "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80";
 const Profile = () => {
   const { data: user, isLoading } = useCurrentUser();
   const { data: posts = [], isLoading: postsLoading } = useMyPosts(user?._id);
@@ -28,7 +27,7 @@ const Profile = () => {
           <div className="flex items-center gap-4">
             <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800 flex items-center justify-center">
               <img
-                src={user?.profilePicture || FALLBACK_AVATAR}
+                src={user?.profilePicture || FALLBACK_IMG}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
@@ -58,11 +57,7 @@ const Profile = () => {
                 <div className="text-lg font-semibold">{posts.length}</div>
                 <div className="text-xs text-slate-400">Posts</div>
               </div>
-              {/* Placeholder za followere ako bude trebalo kasnije */}
-              {/* <div className="text-center">
-                <div className="text-lg font-semibold">0</div>
-                <div className="text-xs text-slate-400">Followers</div>
-              </div> */}
+             
             </div>
 
                 <Link to={"/editProfile"}>
@@ -73,7 +68,7 @@ const Profile = () => {
           </div>
         </header>
 
-        {/* Posts section */}
+       
         <section className="bg-slate-900/60 border border-slate-800 rounded-3xl p-5 shadow-2xl shadow-black/60">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold tracking-wide text-slate-200">
@@ -96,6 +91,7 @@ const Profile = () => {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
               {posts.map((post) => (
+                <Link to={`/editPost/${post._id}`} >
                 <div
                   key={post._id}
                   className="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-slate-800 border border-slate-800 hover:border-sky-500/60 transition shadow-lg shadow-black/40"
@@ -105,12 +101,8 @@ const Profile = () => {
                     alt="Post"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-
-                  {/* Overlay info (ako dodaš likes/comments kasnije) */}
-                  {/* <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-xs text-slate-50">
-                    {post.likes?.length || 0} likes
-                  </div> */}
                 </div>
+                </Link>
               ))}
             </div>
           )}
