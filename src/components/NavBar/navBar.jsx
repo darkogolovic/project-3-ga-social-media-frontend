@@ -16,7 +16,7 @@ const Navbar = () => {
   shadow-2xl shadow-black/60
   flex items-center justify-between
   px-6 py-3
-  text-2xl
+  text-xl sm:text-2xl
 ">
 
   <Link

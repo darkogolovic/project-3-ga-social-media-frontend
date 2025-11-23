@@ -58,7 +58,7 @@ This project provides a comprehensive foundation for developing interactive, rea
 
 ## Links
 
-- **🚀 Deployed API:** [Insert Heroku/Fly.io/Render Link Here]
+- **🚀 Deployed API:** [Circle](https://circle-sociall.netlify.app/)
 - **💻 Backend Repository:** [project-3-ga-social-media-backend](https://github.com/darkogolovic/project-3-ga-social-media-backend)
 
 ---
