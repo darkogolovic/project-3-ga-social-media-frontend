@@ -85,7 +85,7 @@ const SignIn = () => {
             </button>
           </form>
 
-          <p className="text-xs text-slate-500 mt-6 text-center">
+          <p className="p-4 text-center block md:hidden">
             Don't have an account?{" "}
             <span
               className="text-sky-400 hover:text-sky-300 cursor-pointer"

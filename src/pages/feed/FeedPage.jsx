@@ -104,7 +104,7 @@ const FeedPage = () => {
           )}
 
           <button
-            className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-sky-500/90 hover:bg-sky-400 text-slate-950 px-4 py-2 rounded-full text-sm font-semibold shadow-lg shadow-sky-500/40 transition"
+            className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-sky-500/90 hover:bg-sky-400 text-slate-950 px-4 py-2 rounded-full text-sm font-semibold shadow-lg shadow-sky-500/40 transition hidden md:block"
             onClick={() => {
               localStorage.removeItem("token");
               window.location.href = "/";
