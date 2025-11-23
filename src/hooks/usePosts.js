@@ -37,14 +37,14 @@ export const useCreatePost = () => {
 };
 
 
-export const useUpdatePost = (id) => {
+export const useUpdatePost = () => {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: (data) => postService.updatePost(id, data),
-    onSuccess: () => {
+    mutationFn: ({ id, data }) => postService.updatePost(id, data),
+    onSuccess: (_, variables) => {
       qc.invalidateQueries(["posts"]);
-      qc.invalidateQueries(["post", id]);
+      qc.invalidateQueries(["post", variables.id]);
     },
   });
 };
