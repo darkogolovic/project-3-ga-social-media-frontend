@@ -64,7 +64,7 @@ const CreatePost = () => {
         
         <div className="space-y-1 text-center">
           <h1 className="text-xl sm:text-2xl font-semibold tracking-wide">
-            CREATE / UPDATE POST
+            CREATE  POST
           </h1>
           <p className="text-xs text-slate-400">
             Share your thoughts with the world
@@ -157,7 +157,7 @@ const CreatePost = () => {
             ) : (
               <>
                 <i className="fas fa-plus" />
-                CREATE / UPDATE POST
+                CREATE  POST
               </>
             )}
           </button>
