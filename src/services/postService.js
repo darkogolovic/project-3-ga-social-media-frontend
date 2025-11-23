@@ -50,7 +50,7 @@ const postService = {
     return res.data;
   },
   getComments : async (postId) => {
-  const res = await fetch(`/api/posts/${postId}/comments`);
+  const res = await fetch(`/posts/${postId}/comments`);
   if (!res.ok) throw new Error("Failed to fetch comments");
   return res.json(); 
   }

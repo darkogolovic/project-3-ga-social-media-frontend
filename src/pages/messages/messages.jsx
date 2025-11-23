@@ -1,38 +1,41 @@
+// Messages.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { useMessages, useSendMessage } from "../../hooks/useMessages";
+import { useMessages, useSendMessage, useSummarizeMessage } from "../../hooks/useMessages";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
+
 import { io } from "socket.io-client";
 
 const Messages = () => {
-  const { conversationId } = useParams(); // dolazi iz rute
+  const { conversationId } = useParams();
   const { data: user } = useCurrentUser();
   const { data: messages = [], refetch, isLoading } = useMessages(conversationId);
   const sendMessageMutation = useSendMessage();
+  const summarizeMutation = useSummarizeMessage();
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef();
   const socketRef = useRef();
-console.log(messages)
-  // Socket connection
+
+  // Socket.io connection
   useEffect(() => {
     if (!conversationId) return;
 
     socketRef.current = io("http://localhost:3000");
     socketRef.current.emit("joinRoom", conversationId);
 
-    socketRef.current.on("receiveMessage", (msg) => {
-      refetch(); // refresh messages
+    socketRef.current.on("receiveMessage", () => {
+      refetch();
     });
 
     return () => socketRef.current.disconnect();
   }, [conversationId, refetch]);
 
-  // Auto scroll
+ 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Send message
+  
   const handleSend = (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !conversationId || !user?._id) return;
@@ -53,14 +56,18 @@ console.log(messages)
     setNewMessage("");
   };
 
+  
+  const handleSummarize = (messageId) => {
+    summarizeMutation.mutate({ messageId }, { onSuccess: () => refetch() });
+  };
+
   if (!conversationId) {
     return <p className="text-slate-400 p-4">No conversation selected</p>;
   }
 
   return (
-    <div className="h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+    <div className="h-screen bg-slate-950 flex flex-col items-center justify-start p-6">
       <div className="flex flex-col h-[80vh] w-full max-w-2xl bg-slate-900 rounded-3xl shadow-lg overflow-hidden">
-        {/* Messages Container */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-thumb-sky-500 scrollbar-track-slate-700">
           {isLoading ? (
             <p className="text-slate-400 text-center mt-10">Loading messages...</p>
@@ -73,19 +80,36 @@ console.log(messages)
                 className={`flex ${msg.sender === user._id ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-xs sm:max-w-md px-4 py-2 rounded-2xl break-words ${
+                  className={`max-w-xs sm:max-w-md px-4 py-2 rounded-2xl break-words relative ${
                     msg.sender === user._id
                       ? "bg-sky-500 text-white rounded-tr-none"
                       : "bg-slate-700 text-slate-100 rounded-tl-none"
                   }`}
                 >
                   <p className="text-sm">{msg.text}</p>
-                  <span className="text-xs text-slate-400 block mt-1 text-right">
+
+                  {msg.summary && (
+                    <p className="text-xs text-sky-300 italic mt-1">
+                      Summary: {msg.summary}
+                    </p>
+                  )}
+
+                  <span className="text-xs text-slate-900 block mt-1 text-right">
                     {new Date(msg.createdAt).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
                   </span>
+
+                  {msg.text.length > 100 && msg.sender !== user._id &&  !msg.summary &&(
+                    <button
+                      className="absolute bottom-1 right-1 px-2 py-1 bg-sky-900 text-white text-xs rounded hover:bg-sky-100 hover:text-sky-900"
+                      onClick={() => handleSummarize(msg._id)}
+                      disabled={summarizeMutation.isLoading}
+                    >
+                      {summarizeMutation.isLoading ? "Summarizing..." : "Summarize"}
+                    </button>
+                  )}
                 </div>
               </div>
             ))
@@ -93,7 +117,6 @@ console.log(messages)
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
         <form
           onSubmit={handleSend}
           className="flex items-center gap-2 px-4 py-3 border-t border-slate-700 bg-slate-800"

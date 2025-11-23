@@ -6,8 +6,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  console.log("AXIOS URL:", config.url);
-  console.log("AXIOS TOKEN:", localStorage.getItem("token"));
+
 
   const publicRoutes = ["/register", "/login", "/verify"];
 
@@ -18,7 +17,6 @@ api.interceptors.request.use((config) => {
     }
   }
 
-  console.log("AXIOS AUTH HEADER SENT:", config.headers.Authorization);
   return config;
 });
 

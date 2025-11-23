@@ -7,14 +7,20 @@ import Welcome from "../../components/Welcome";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isLoading,error } = useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
       toast.success(data.message);
       navigate("/feed");
     },
-    onError: (data) => toast.error(data.message),
+    onError: (err) => {
+      if (err.response?.status === 400) {
+        toast.error("Invalid credentials");
+      } else {
+        toast.error("Login failed. Try again later.");
+      }
+    },
   });
 
   const [formData, setFormData] = useState({
