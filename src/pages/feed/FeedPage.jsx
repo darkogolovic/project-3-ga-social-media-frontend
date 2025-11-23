@@ -22,6 +22,7 @@ const FeedPage = () => {
   const userId = localStorage.getItem("userId");
 
   const posts = data?.pages?.flatMap((p) => p.posts ?? []) ?? [];
+ 
 
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [newComment, setNewComment] = useState("");
