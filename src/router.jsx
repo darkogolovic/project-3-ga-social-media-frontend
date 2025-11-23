@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "./components/MainLayout";
 import AuthLayout from "./components/AppLayout";
-import SignIn from "./pages/sign-in/Sign-in";
+import SignIn from "./pages/sign-in/sign-in";
 import SignUp from "./pages/sign-up/sign-up";
 import FeedPage from "./pages/feed/FeedPage";
 import Profile from "./pages/profile/profile";
