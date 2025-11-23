@@ -93,7 +93,7 @@ const EditPost = () => {
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex items-center justify-center px-4 py-6 ">
-      <div className="w-full max-w-lg bg-slate-900/80 border border-slate-800 rounded-3xl shadow-2xl p-4 space-y-4 mt-4 mb-20 ">
+      <div className="w-full max-w-lg bg-slate-900/80 border border-slate-800 rounded-3xl shadow-2xl p-2 space-y-4 mt-4 mb-20 ">
 
         <div className="space-y-1 text-center">
           <h1 className="text-xl sm:text-2xl font-semibold tracking-wide">
@@ -115,7 +115,7 @@ const EditPost = () => {
                 <div className="relative w-full rounded-xl overflow-hidden border border-sky-500/40 shadow-lg shadow-sky-500/20">
                   <img
                     src={postData.imagePreview}
-                    className="w-full h-64 object-cover"
+                    className="w-full h-48 object-cover"
                     alt="Preview"
                   />
 

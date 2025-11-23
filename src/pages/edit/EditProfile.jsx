@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useCurrentUser, useEditUser } from "../../hooks/useCurrentUser";
+import toast from "react-hot-toast";
 
 const DEFAULT_IMAGE = "https://via.placeholder.com/150";
 
@@ -51,12 +52,12 @@ const EditProfile = () => {
     if (!currentUser) return;
 
     if (profileData.newPassword && profileData.newPassword !== profileData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords don't match")
       return;
     }
 
     if (profileData.newPassword && profileData.newPassword.length < 3) {
-      alert("Password must be at least 3 characters long!");
+      toast.error("Password must be at least 3 characters long!");
       return;
     }
 
@@ -69,10 +70,10 @@ const EditProfile = () => {
       if (profileData.profilePictureFile) formData.append("profilePicture", profileData.profilePictureFile);
 
       await editUserMutation.mutateAsync({ id: currentUser._id, formData });
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
     } catch (err) {
       console.error(err);
-      alert("Update failed!");
+      toast.error("Update failed!");
     } finally {
       setIsSubmitting(false);
     }
@@ -81,7 +82,7 @@ const EditProfile = () => {
   if (userLoading) return <p className="text-center text-slate-400 mt-20">Loading user...</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex items-center justify-center px-4 py-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex items-start justify-center px-4 py-6">
       <div className="w-full max-w-xl bg-slate-900/80 border border-slate-800 rounded-3xl shadow-2xl shadow-black/70 p-6 sm:p-8 space-y-6">
         <div className="space-y-1 text-center">
           <h1 className="text-xl sm:text-2xl font-semibold tracking-wide">EDIT PROFILE</h1>
@@ -89,8 +90,8 @@ const EditProfile = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Profile Image */}
-          <div className="flex flex-col items-center gap-4">
+         
+          <div className="flex flex-col items-center gap-2">
             <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-full overflow-hidden border-2 border-sky-500/60 bg-slate-900 flex items-center justify-center shadow-lg shadow-sky-500/30">
               <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
             </div>
@@ -123,7 +124,7 @@ const EditProfile = () => {
             />
           </div>
 
-          {/* Username */}
+         
           <div className="flex flex-col gap-1">
             <label className="text-xs text-slate-300">Username</label>
             <input
@@ -136,7 +137,7 @@ const EditProfile = () => {
             />
           </div>
 
-          {/* Password */}
+         
           <div className="space-y-3">
             <h2 className="text-sm font-semibold tracking-wide text-slate-200">CHANGE PASSWORD</h2>
             <input
@@ -147,6 +148,7 @@ const EditProfile = () => {
               placeholder="Current password"
               className="w-full rounded-xl bg-slate-950/60 border border-slate-700 px-3 py-2 text-sm text-slate-100"
             />
+            <div className="flex gap-2">
             <input
               type="password"
               name="newPassword"
@@ -163,9 +165,10 @@ const EditProfile = () => {
               placeholder="Confirm new password"
               className="w-full rounded-xl bg-slate-950/60 border border-slate-700 px-3 py-2 text-sm text-slate-100"
             />
+            </div>
           </div>
 
-          {/* Buttons */}
+       
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <button
               type="submit"
