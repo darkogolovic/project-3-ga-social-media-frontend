@@ -92,8 +92,8 @@ const EditPost = () => {
 }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex items-center justify-center px-4 py-6 ">
-      <div className="w-full max-w-lg bg-slate-900/80 border border-slate-800 rounded-3xl shadow-2xl p-4 sm:p-6 space-y-4 mt-4 mb-20">
+    <div className="h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex items-center justify-center px-4 py-6 ">
+      <div className="w-full max-w-lg bg-slate-900/80 border border-slate-800 rounded-3xl shadow-2xl p-4 space-y-4 mt-4 mb-20 ">
 
         <div className="space-y-1 text-center">
           <h1 className="text-xl sm:text-2xl font-semibold tracking-wide">
@@ -161,7 +161,7 @@ const EditPost = () => {
                 }
                 placeholder="What's on your mind?"
                 maxLength={500}
-                className="w-full h-32 rounded-xl bg-slate-950/60 border border-slate-700 px-3 py-3 text-sm text-slate-100 placeholder:text-slate-500 resize-none focus:outline-none focus:ring-2 focus:ring-sky-500/70 focus:border-sky-500/70"
+                className="w-full h-20 rounded-xl bg-slate-950/60 border border-slate-700 px-3 py-3 text-sm text-slate-100 placeholder:text-slate-500 resize-none focus:outline-none focus:ring-2 focus:ring-sky-500/70 focus:border-sky-500/70"
               />
 
               <div className="absolute bottom-2 right-3 text-xs text-slate-500">

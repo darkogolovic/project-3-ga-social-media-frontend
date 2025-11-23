@@ -37,6 +37,7 @@
 - [Features](#features)
 - [Project Structure](#project-structure)
   - [Project Index](#project-index)
+- [Future Enhancement](#future-enhancement-plan)
 
 ---
 
@@ -598,6 +599,19 @@ Run the project with:
 ```sh
 npm run dev
 ```
+
+---
+
+
+# Future Enhancement Plan
+
+| Feature            | Purpose                               |
+| ------------------ | ------------------------------------- |
+| User Profiles      | Establish identity & view posts       |
+| Follow System      | Enable networking & personalized feed |
+| Visibility Control | Allow privacy & sharing control       |
+| Filtered Feed      | Personalized content stream           |
+| Group Chats        | Facilitate group discussion           |
 
 ---
 
