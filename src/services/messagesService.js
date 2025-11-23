@@ -10,6 +10,10 @@ const messageService = {
     const res = await api.get(`/messages/${conversationId}`);
     return res.data;
   },
+  summarize: async (messageId) => {
+    const res = await api.post(`/messages/${messageId}/summarize`);
+    return res.data;
+  },
 };
 
 export default messageService;
