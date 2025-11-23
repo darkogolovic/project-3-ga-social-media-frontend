@@ -10,6 +10,7 @@ import Conversations from "./pages/conversation/Conversations";
 import CreatePost from "./pages/createPost/CreatePost";
 import Messages from "./pages/messages/messages";
 import EditProfile from "./pages/edit/EditProfile";
+import EditPost from "./pages/edit/EditPost";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,8 @@ const router = createBrowserRouter([
       {path:'/conversations',element:<Conversations />},
       {path: '/createPost',element:<CreatePost />},
       {path: '/messages/:conversationId',element:<Messages />},
-      {path: '/editProfile',element:<EditProfile/>}
+      {path: '/editProfile',element:<EditProfile/>},
+      {path: '/editPost/:id',element:<EditPost/>}
       
     ],
   },

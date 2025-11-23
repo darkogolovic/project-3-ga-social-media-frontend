@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  };
+
   return (
     <nav className="
       fixed bottom-4 left-1/2 -translate-x-1/2
@@ -13,7 +18,7 @@ const Navbar = () => {
       px-6 py-3
       text-2xl
     ">
-      {/* HOME */}
+    
       <Link
         to="/feed"
         className="
@@ -26,7 +31,7 @@ const Navbar = () => {
         🏠
       </Link>
 
-      {/* CHATS */}
+    
       <Link
         to="/conversations"
         className="
@@ -41,7 +46,7 @@ const Navbar = () => {
         💬
       </Link>
 
-      {/* CREATE POST */}
+     
       <Link
         to="/createPost"
         className="
@@ -54,7 +59,7 @@ const Navbar = () => {
         ➕
       </Link>
 
-      {/* PROFILE */}
+      
       <Link
         to="/profile"
         className="
@@ -68,6 +73,19 @@ const Navbar = () => {
       >
         👤
       </Link>
+
+     
+      <button
+        onClick={handleSignOut}
+        className="
+          p-2 text-slate-400 hover:text-sky-400 
+          hover:bg-slate-800/50 rounded-xl 
+          transition text-sm
+        "
+        title="Sign Out"
+      >
+        Sign out
+      </button>
     </nav>
   );
 };

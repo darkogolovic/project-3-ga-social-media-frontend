@@ -12,13 +12,8 @@ const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80";
 
 const FeedPage = () => {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-  } = useInfinitePosts();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfinitePosts();
   const likeMutation = useLikePost();
   const { data: user } = useCurrentUser();
   const userId = localStorage.getItem("userId");
@@ -33,7 +28,6 @@ const FeedPage = () => {
     refetch: refetchComments,
     isLoading: commentsLoading,
   } = useGetComments(selectedPostId);
- 
 
   const addCommentMutation = useAddComment(selectedPostId);
 
@@ -41,7 +35,6 @@ const FeedPage = () => {
     if (selectedPostId) refetchComments();
   }, [selectedPostId]);
 
-  
   useEffect(() => {
     const handleScroll = () => {
       const nearBottom =
@@ -72,9 +65,7 @@ const FeedPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col items-center px-4 py-6">
-      
       <header className="w-full max-w-6xl mb-6 md:mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        
         <div className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-2xl bg-sky-500 flex items-center justify-center font-black text-slate-950 shadow-lg shadow-sky-500/40">
             C
@@ -87,25 +78,28 @@ const FeedPage = () => {
           </div>
         </div>
 
-       
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 md:justify-end">
           {user && (
-            <Link to={'/editProfile'}>
-            <div className="flex items-center gap-3">
-              <div className="flex flex-col items-start sm:items-end">
-                <span className="text-sm font-medium break-all">
-                  @{user.username}
-                </span>
-                {user.email && (
-                  <span className="hidden sm:inline text-xs text-slate-400 truncate max-w-[180px] md:max-w-[220px]">
-                    {user.email}
+            <Link to={"/editProfile"}>
+              <div className="flex items-center gap-3">
+                <div className="flex flex-col items-start sm:items-end">
+                  <span className="text-sm font-medium break-all">
+                    @{user.username}
                   </span>
-                )}
+                  {user.email && (
+                    <span className="hidden sm:inline text-xs text-slate-400 truncate max-w-[180px] md:max-w-[220px]">
+                      {user.email}
+                    </span>
+                  )}
+                </div>
+                <div className="h-9 w-9 rounded-full overflow-hidden">
+                  <img
+                    src={user.profilePicture || FALLBACK_IMG}
+                    alt={user.username}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
               </div>
-              <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center text-xs font-semibold uppercase border border-slate-700">
-                {user.username?.[0] || "U"}
-              </div>
-            </div>
             </Link>
           )}
 
@@ -121,34 +115,29 @@ const FeedPage = () => {
         </div>
       </header>
 
-      
       {posts.length > 0 && (
         <section className="w-full max-w-2xl mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-slate-900/60 border border-slate-800 rounded-2xl px-5 py-4 backdrop-blur-md shadow-xl shadow-black/40">
           <div className="flex items-center gap-3 sm:gap-4">
-            <div className="h-12 w-12 rounded-full bg-slate-800 flex items-center justify-center text-sm font-semibold uppercase border border-slate-700">
-              {posts[0]?.author?.username?.[0] || "P"}
+            <div className="h-9 w-9 rounded-full overflow-hidden">
+              <img
+                src={user.profilePicture || FALLBACK_IMG}
+                alt={user.username}
+                className="h-full w-full object-cover"
+              />
             </div>
             <div>
               <h1 className="text-lg font-semibold">
-                @{posts[0]?.author?.username || "profile"}
+                @{user.username || "profile"}
               </h1>
               <p className="text-xs text-slate-400">
                 {posts.length} post{posts.length !== 1 && "s"} in your circle
               </p>
             </div>
           </div>
-
-          {posts[0]?.author?.username === user?.username && (
-            <button className="self-start sm:self-auto text-xs font-medium px-4 py-2 rounded-full bg-slate-800 hover:bg-slate-700 border border-slate-700 transition">
-              Edit profile / posts
-            </button>
-          )}
         </section>
       )}
 
-     
       <main className="w-full max-w-2xl space-y-4">
-       
         {isLoading &&
           Array.from({ length: 2 }).map((_, i) => (
             <div
@@ -172,7 +161,6 @@ const FeedPage = () => {
             </div>
           ))}
 
-        
         {posts.map((post) => {
           const isLiked = post.likes?.includes(userId);
           const createdAt =
@@ -185,7 +173,6 @@ const FeedPage = () => {
               key={post._id}
               className="relative bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl shadow-black/70"
             >
-              
               <header className="flex items-center justify-between px-4 pt-3 pb-2">
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center text-[11px] font-semibold uppercase border border-slate-700">
@@ -203,13 +190,15 @@ const FeedPage = () => {
                   </div>
                 </div>
                 {post.author?.username === user?.username && (
-                  <span className="text-[10px] px-2 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
-                    You
-                  </span>
+                  <Link
+                    to={`/editPost/${post._id}`}
+                    className="text-xs px-3 py-1 bg-sky-600 rounded-full hover:bg-sky-500"
+                  >
+                    Edit
+                  </Link>
                 )}
               </header>
 
-             
               <div className="relative h-70 md:h-72 overflow-hidden">
                 <img
                   src={post.image || FALLBACK_IMG}
@@ -270,7 +259,7 @@ const FeedPage = () => {
         )}
       </main>
 
-      {/* Comments Modal */}
+     
       {selectedPostId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
           <div className="relative w-full max-w-lg bg-slate-950/95 border border-slate-800 rounded-3xl p-6 shadow-2xl shadow-black/70">

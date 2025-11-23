@@ -1,18 +1,33 @@
-import React, { useState, useRef } from "react";
-import { useCreatePost } from "../../hooks/usePosts.js";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import { usePost, useUpdatePost, useDeletePost } from "../../hooks/usePosts.js";
 
-const CreatePost = () => {
-  const createPost = useCreatePost();
-  const fileInputRef = useRef(null);
+const EditPost = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+
+  const fileInputRef = useRef(null);
+
+  const { data: post, isLoading } = usePost(id);
+  const updatePost = useUpdatePost();
+  const deletePost = useDeletePost();
 
   const [postData, setPostData] = useState({
     content: "",
     image: null,
     imagePreview: "",
   });
+
+  useEffect(() => {
+    if (post) {
+      setPostData({
+        content: post.content,
+        image: null,
+        imagePreview: post.image ? post.image : "",
+      });
+    }
+  }, [post]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
@@ -37,46 +52,63 @@ const CreatePost = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!postData.content.trim() && !postData.image) {
-      toast.error("Please add a caption or image");
-      return;
-    }
-
     const formData = new FormData();
     formData.append("content", postData.content);
-    if (postData.image) formData.append("image", postData.image);
+    if (postData.image) {
+      formData.append("image", postData.image);
+    }
+    if (!postData.image && postData.imagePreview === "") {
+      formData.append("removeImage", true);
+    }
 
-    createPost.mutate(formData, {
+    updatePost.mutate(
+      { id, data: formData },
+      {
+        onSuccess: () => {
+          toast.success("Post updated");
+          navigate("/feed");
+        },
+      }
+    );
+  };
+
+  const handleDelete = () => {
+    if (!confirm("Are you sure you want to delete this post?")) return;
+
+    deletePost.mutate(id, {
       onSuccess: () => {
-        toast.success("Post created");
+        toast.success("Post deleted");
         navigate("/feed");
-        setPostData({ content: "", image: null, imagePreview: "" });
-        if (fileInputRef.current) fileInputRef.current.value = "";
       },
     });
   };
 
+  if (isLoading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-400 text-lg font-medium">
+      Loading post...
+    </div>
+  );
+}
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex items-center justify-center px-4 py-6 ">
-      <div
-        className="w-full max-w-lg bg-slate-900/80 border border-slate-800 rounded-3xl shadow-2xl p-4 sm:p-6 space-y-4 mt-4 mb-20"
-      >
-        
+      <div className="w-full max-w-lg bg-slate-900/80 border border-slate-800 rounded-3xl shadow-2xl p-4 sm:p-6 space-y-4 mt-4 mb-20">
+
         <div className="space-y-1 text-center">
           <h1 className="text-xl sm:text-2xl font-semibold tracking-wide">
-            CREATE / UPDATE POST
+            EDIT POST
           </h1>
           <p className="text-xs text-slate-400">
-            Share your thoughts with the world
+            Update or delete your post
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-         
+
+       
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold tracking-wide text-slate-200">
-              UPLOAD IMAGE
-            </h2>
+            <h2 className="text-sm font-semibold tracking-wide text-slate-200">IMAGE</h2>
 
             <div className="flex flex-col items-center gap-4">
               {postData.imagePreview ? (
@@ -104,9 +136,6 @@ const CreatePost = () => {
                   <p className="text-sm text-slate-300">
                     Click to upload image
                   </p>
-                  <span className="text-xs text-slate-500">
-                    PNG, JPG, GIF up to 10MB
-                  </span>
                 </div>
               )}
 
@@ -120,11 +149,9 @@ const CreatePost = () => {
             </div>
           </div>
 
-          
+     
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold tracking-wide text-slate-200">
-              CONTENT
-            </h2>
+            <h2 className="text-sm font-semibold tracking-wide text-slate-200">CONTENT</h2>
 
             <div className="relative">
               <textarea
@@ -143,28 +170,34 @@ const CreatePost = () => {
             </div>
           </div>
 
-          
           <button
             type="submit"
-            disabled={createPost.isPending}
+            disabled={updatePost.isPending}
             className="w-full inline-flex justify-center items-center gap-2 px-4 py-3 mt-4 rounded-full text-sm font-semibold bg-sky-500 hover:bg-sky-400 text-slate-950 shadow-lg shadow-sky-500/40 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {createPost.isPending ? (
+            {updatePost.isPending ? (
               <>
                 <span className="h-4 w-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></span>
-                CREATING...
+                UPDATING...
               </>
             ) : (
               <>
-                <i className="fas fa-plus" />
-                CREATE / UPDATE POST
+                <i className="fas fa-save" /> UPDATE POST
               </>
             )}
           </button>
         </form>
+
+        
+        <button
+          onClick={handleDelete}
+          className="w-full mt-3 inline-flex justify-center items-center gap-2 px-4 py-3 rounded-full text-sm font-semibold bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/40 transition"
+        >
+          <i className="fas fa-trash" /> DELETE POST
+        </button>
       </div>
     </div>
   );
 };
 
-export default CreatePost;
+export default EditPost;
