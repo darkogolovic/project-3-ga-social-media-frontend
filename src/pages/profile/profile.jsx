@@ -1,6 +1,7 @@
 // import "./profile.css"; // više ne treba
 import { useCurrentUser } from "../../hooks/useCurrentUser.js";
 import { useMyPosts } from "../../hooks/useMyPosts.js";
+import { Link } from "react-router"
 
 const FALLBACK_AVATAR =
   "https://ui-avatars.com/api/?name=C+User&background=0f172a&color=f9fafb";
@@ -64,9 +65,11 @@ const Profile = () => {
               </div> */}
             </div>
 
+                <Link to={"/editProfile"}>
             <button className="w-full sm:w-auto inline-flex justify-center px-4 py-2 rounded-full text-xs font-semibold bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 transition">
               Edit Profile
             </button>
+            </Link>
           </div>
         </header>
 
