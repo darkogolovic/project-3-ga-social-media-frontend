@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   useInfinitePosts,
   useLikePost,
@@ -19,15 +19,14 @@ const FeedPage = () => {
     useInfinitePosts();
   const likeMutation = useLikePost();
   const { data: user } = useCurrentUser();
+
   const userId = localStorage.getItem("userId");
 
   const posts = data?.pages?.flatMap((p) => p.posts ?? []) ?? [];
- 
 
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [newComment, setNewComment] = useState("");
 
-  
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editCommentText, setEditCommentText] = useState("");
 
@@ -45,21 +44,33 @@ const FeedPage = () => {
     if (selectedPostId) refetchComments();
   }, [selectedPostId, refetchComments]);
 
+  // ---------------------------
+  // 📌 IntersectionObserver infinite scroll
+  // ---------------------------
+  const observerRef = useRef();
+
   useEffect(() => {
-    const handleScroll = () => {
-      const nearBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 200;
+    if (!hasNextPage || isFetchingNextPage) return;
 
-      if (nearBottom && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    if (observerRef.current) observer.observe(observerRef.current);
+
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current);
     };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
-
+  // ---------------------------
+  // 📌 Comment actions
+  // ---------------------------
   const handleAddComment = () => {
     if (!newComment.trim()) return;
     addCommentMutation.mutate(
@@ -72,8 +83,6 @@ const FeedPage = () => {
       }
     );
   };
-
- 
 
   const startEditingComment = (comment) => {
     setEditingCommentId(comment._id);
@@ -97,7 +106,6 @@ const FeedPage = () => {
       {
         onSuccess: () => {
           cancelEditingComment();
-         
         },
       }
     );
@@ -110,7 +118,7 @@ const FeedPage = () => {
       { postId: selectedPostId, commentId },
       {
         onSuccess: () => {
-          toast.success('Comment deleted')
+          toast.success("Comment deleted");
         },
       }
     );
@@ -122,6 +130,8 @@ const FeedPage = () => {
     setEditCommentText("");
     setNewComment("");
   };
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col items-center px-4 py-6">

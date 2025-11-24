@@ -65,7 +65,7 @@ const UsersList = ({ currentUser }) => {
                     className="w-10 h-10 rounded-full object-cover"
                   />
 
-                  {/* Online indicator */}
+                
                   <span
                     className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-slate-900 ${
                       isOnline ? "bg-green-500" : "bg-slate-600"

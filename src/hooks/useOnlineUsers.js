@@ -16,6 +16,7 @@ export const useOnlineUsers = (currentUser) => {
 
     return () => {
       socket.off("onlineUsers");
+      socket.disconnect();
     };
   }, [currentUser]);
 
